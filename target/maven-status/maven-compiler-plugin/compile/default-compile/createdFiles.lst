@@ -1,9 +1,13 @@
+br\com\usuarios\sistema\beans\ClienteBean.class
+br\com\usuarios\sistema\Produto.class
 br\com\usuarios\DB\DAO.class
-br\com\usuarios\utilitarios\Autorizador.class
 br\com\usuarios\sistema\dao\UsuarioDao.class
-br\com\usuarios\utilitarios\Messages.class
 br\com\usuarios\utilitarios\PasswordCrypt.class
 br\com\usuarios\sistema\beans\LoginBean.class
 br\com\usuarios\sistema\beans\UsuarioBean.class
 br\com\usuarios\sistema\Usuario.class
+br\com\usuarios\utilitarios\Autorizador.class
+br\com\usuarios\sistema\Fisica.class
+br\com\usuarios\utilitarios\Dates.class
+br\com\usuarios\utilitarios\Messages.class
 br\com\usuarios\DB\JPAUtil.class

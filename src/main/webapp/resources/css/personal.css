@@ -1,0 +1,40 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15/06/2018, 08:58:49
+    Author     : Acer
+*/
+
+.bold {font-weight: bold !important;}
+.text-center {text-align: center !important;}
+
+.margin-top-aux {margin-top: 8px !important;}
+.margin-top-min {margin-top: 5px !important;}
+.margin-top-med {margin-top: 10px !important;}
+.margin-top-max {margin-top: 15px !important;}
+
+.font-color-black {color: black !important;}
+.font-color-red {color: red !important;}
+.font-color-blue {color: #006de5 !important;}
+
+.bg-gray {background: gray !important;}
+.bg-white {background: white !important;}
+.bg-black {background: black !important;}
+.bg-orange {background: orange !important;}
+.bg-purple {background: purple !important;}
+.bg-yellow-ligth {background: #ffffcc !important;}
+.bg-green-ligth {background: #ccffcc !important;}
+.bg-orange-dark {background: darkorange !important;}
+.bg-salmon {background: salmon !important;}
+.bg-info {background: #d9edf7 !important;}
+.bg-yellowgreen {background: yellowgreen !important;}
+
+.excluded-item {text-decoration: line-through; background: salmon !important}
+
+.font-size-12 {font-size: 12pt !important;}
+.font-size-16 {font-size: 16pt !important;}
+.font-size-24 {font-size: 24pt !important;}
+.ui-state-disabled {color: gray !important; opacity: 0.6 !important;  filter: alpha(opacity=6) !important;}

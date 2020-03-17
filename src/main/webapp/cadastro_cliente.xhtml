@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="formCadastroCliente">
+            <div style="margin-top: 20px"/>
+            <p:toolbar>
+                <f:facet name="left" >
+                    <p:commandButton value="Novo" title="Novo"  update="formCadastroCliente" icon="fa fa-file" async="false"  />
+                    <span class="ui-separator" style="padding-right: 5px;">
+                        <span class="fa fa-ellipsis-v SoftGray" />
+                    </span>
+                    <p:commandButton title="Gravar" update="formCadastroCliente" action="#{clienteBean.save()}" icon="fa fa-save" >
+                        <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                </f:facet>
+                <f:facet name="right"> 
+                    <p:menuButton value="Opções">
+                        <p:menuitem value="Gravar"  update="formCadastroCliente" action="#{clienteBean.save()}" icon="fa fa-save" >
+                            <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
+                        </p:menuitem>
+                        <p:menuitem value="Novo" title="Novo"  update="formCadastroCliente" icon="fa fa-file" async="false" />
+                    </p:menuButton>
+                </f:facet>
+            </p:toolbar>  
+
+            <p:growl showSummary="false" showDetail="true" />
+            <p:messages showDetail="true" showSummary="false"/>
+
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card">
+                            <h1>Cadastro de Cliente</h1>
+                            <div class="ui-g ui-fluid">
+                                <div class="ui-g-12 ui-lg-6">
+                                    <div class="card">
+                                        <h1>Dados Gerais</h1>
+                                        <div class="card">
+                                            <div class="ui-g">
+                                                <div class="ui-g-12 ui-lg-9"> 
+                                                    <p:outputLabel value="Nome" />
+                                                    <p:inputText maxlength="100" value="#{clienteBean.fisica.nome}" converter="#{toUpperCase}">
+                                                        <f:passThroughAttribute name="onpaste" value="return false" />
+                                                        <f:passThroughAttribute name="autocomplete" value="off" />
+                                                        <f:passThroughAttribute name="ondrop" value="return false" />
+                                                        <p:ajax event="change" update="formCadastroCliente" listener="#{fisicaBean.exists}"  />
+                                                    </p:inputText>                                            
+                                                </div>
+                                                <div class="ui-g-12 ui-lg-3 ui-md-6 ui-sm-12">
+                                                    <p:outputLabel value="CPF"/>
+                                                    <p:inputMask mask="999.999.999-99" value="#{clienteBean.fisica.documento}" placeholder="999.999.999.99" styleClass="text-center" id="focus_element" autocomplete="false">
+                                                        <p:ajax event="change" update="formCadastroCliente" listener="#{clienteBean.exists}"  />
+                                                        <f:passThroughAttribute name="onpaste" value="return false" />
+                                                        <f:passThroughAttribute name="autocomplete" value="off" />
+                                                        <f:passThroughAttribute name="ondrop" value="return false" />
+                                                    </p:inputMask>
+                                                </div>  
+                                                <div class="ui-g-12 ui-lg-3 ui-md-6 ui-sm-12">
+                                                    <p:outputLabel value="Nascimento" />
+                                                    <p:calendar value="#{clienteBean.fisica.dataNascimento}" pattern="dd/MM/yyyy" yearRange="c-120:c-0"  style="padding-left: 5"  navigator="true" mask="99/99/9999"  placeholder="99/99/9999" styleClass="text-center" converterMessage="Data de nascimento inválida - Formato 01/01/1900"  locale="pt_BR" >
+                                                        <p:ajax event="dateSelect" update="@this" listener="#{clienteBean.selectedDtNascimento}"/>
+                                                        <p:ajax event="change" update="@this" listener="#{clienteBean.selectedDtNascimento}"/>
+                                                    </p:calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-lg-6 ui-md-6 ui-sm-12">
+                                                    <p:outputLabel value="E-mail" />
+                                                    <p:inputText id="i_email1" value="#{clienteBean.fisica.email}"  styleClass="text-center" validatorMessage="Email inválido #{fisicaBean.fisica.pessoa.email1}" required="false" placeholder="Formato: meuemail@provedor.com">
+                                                        <p:ajax event="change" update="i_email1 i_message_email1" />
+                                                    </p:inputText>
+                                                    <p:message for="i_email1" id="i_message_email1" />
+                                                </div>
+
+                                                <div class="ui-g-12 ui-lg-3 ui-md-6 ui-sm-12">
+                                                    <p:outputLabel value="Celular" />
+                                                    <p:inputMask value="#{clienteBean.fisica.celular}"  styleClass="text-center" mask="(99)99999-9999" placeholder="(99)99999-9999">
+                                                        <p:ajax event="change" update="@this" />
+                                                        <f:passThroughAttribute name="autocomplete" value="off" />
+                                                        <f:passThroughAttribute name="ondrop" value="return false" />
+                                                    </p:inputMask>
+                                                </div>
+                                                <div class="ui-g-12 ui-lg-3 ui-md-6 ui-sm-12">
+                                                    <p:outputLabel value="Telefone" />
+                                                    <p:inputMask value="#{clienteBean.fisica.telefone}"  styleClass="text-center" mask="(99)9999-9999" placeholder="(99)9999-9999">
+                                                        <p:ajax event="change" update="@this" />
+                                                        <f:passThroughAttribute name="autocomplete" value="off" />
+                                                        <f:passThroughAttribute name="ondrop" value="return false" />
+                                                    </p:inputMask>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+
+            <h:form prependId="false">
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>                          
+            </h:form>
+
+    </ui:define>
+
+</ui:composition>
