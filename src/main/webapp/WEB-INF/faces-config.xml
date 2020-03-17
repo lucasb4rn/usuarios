@@ -11,15 +11,6 @@
             <default-locale>pt_BR</default-locale>
         </locale-config>
     </application>
-
-    <navigation-rule>
-        <navigation-case>
-            <from-outcome>home</from-outcome>
-            <to-view-id>/home.jsf</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-
     <application>
         <action-listener>org.primefaces.application.DialogActionListener</action-listener>
         <navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
@@ -29,5 +20,7 @@
     <lifecycle>
         <phase-listener>br.com.usuarios.utilitarios.Autorizador</phase-listener>
     </lifecycle>
+
+
 
 </faces-config>

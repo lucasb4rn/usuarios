@@ -9,11 +9,12 @@
     <packaging>war</packaging>
 
     <name>usuarios</name>
-
+    
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
 
     <dependencies>
         <dependency>
@@ -51,7 +52,6 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
@@ -161,6 +161,8 @@
         </dependency>
 
     </dependencies>
+
+
     <build>
         <plugins>
             <plugin>
