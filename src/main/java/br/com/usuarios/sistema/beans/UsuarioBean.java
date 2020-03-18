@@ -9,6 +9,7 @@ import br.com.usuarios.DB.DAO;
 import br.com.usuarios.sistema.Usuario;
 import br.com.usuarios.sistema.dao.UsuarioDao;
 import br.com.usuarios.utilitarios.Messages;
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 @ManagedBean
 @RequestScoped
-public class UsuarioBean {
+public class UsuarioBean implements Serializable {
 
     private Usuario usuario;
     private List<Usuario> listaUsuarios;

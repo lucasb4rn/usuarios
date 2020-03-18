@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="formCadastroCliente">
+            <div style="margin-top: 20px"/>
+            <p:growl showSummary="false" showDetail="true" />
+            <p:messages showDetail="true" showSummary="false"/>
+
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card">
+                        <h1>Pesquisa de Cliente</h1>
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12 ui-lg-8">
+                                <div class="card">
+                                    <div class="ui-g">
+                                        <div class="ui-lg-2 ui-g-12 ui-md-12">
+                                            <label>Filtro</label>
+                                            <h:panelGroup layout="span">
+                                                <p:selectOneMenu value="#{fisicaBean.filter}">
+                                                    <p:ajax event="change" update="@this id_find_term" global="false"/>
+                                                    <f:selectItem itemValue="nome"       itemLabel="Nome"/>
+                                                    <f:selectItem itemValue="cpf"        itemLabel="CPF"/>
+                                                    <f:selectItem itemValue="email1"     itemLabel="E-mail" />
+                                                </p:selectOneMenu>
+                                            </h:panelGroup>
+                                        </div>
+                                        <div class="ui-lg-7 ui-g-12 ui-md-12">
+                                            <label>Descrição da Pesquisa</label>
+                                            <h:panelGroup  id="id_find_term">
+                                                <p:inputMask value="#{fisicaBean.caixaPesquisa}"  mask="#{mask.getModelo(fisicaBean.filter)}">
+                                                    <p:ajax event="change" update="@this" global="false" />
+                                                </p:inputMask>
+                                            </h:panelGroup>
+                                        </div>
+                                        <div class="ui-lg-3 ui-g-12 ui-md-12">
+                                            <div style="margin-top: 15px"></div>
+                                            <p:commandButton value="Pesquisar" action="#{fisicaBean.findPessoaFiltro()}" update="formCadastroCliente"/>
+                                        </div>
+                                        <div class="ui-g ui-fluid">
+                                            <div class="ui-g-12 ui-md-12 ui-lg-12">
+                                                <p:dataTable value="#{fisicaBean.listaFisicaPesquisa}" var="fisicaX" id="tbl" emptyMessage="Nenhum registro encontrado" paginator="true" >
+                                                    <p:column headerText="Nome">
+                                                        <p:commandLink action="#{fisicaBean.redireciona(fisicaX)}" value="#{fisicaX.nome}"/>
+                                                    </p:column>
+                                                    <p:column headerText="CPF" width="150"  styleClass="text-center">
+                                                        <p:commandLink action="#{fisicaBean.redireciona(fisicaX)}" value="#{fisicaX.documento}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Email" styleClass="text-center">
+                                                        <p:commandLink action="#{fisicaBean.redireciona(fisicaX)}" value="#{fisicaX.email}"/>
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </div> 
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+        <h:form prependId="false">
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>                          
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

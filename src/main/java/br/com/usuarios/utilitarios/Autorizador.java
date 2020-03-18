@@ -12,7 +12,6 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 
-
 public class Autorizador implements PhaseListener {
 
     @Override
@@ -30,7 +29,7 @@ public class Autorizador implements PhaseListener {
         if (usuarioLogado != null) {
             return;
         }
-        
+
         NavigationHandler handler = context.getApplication().getNavigationHandler();
         handler.handleNavigation(context, null, "/login.xhtml?faces-redirect=true");
         context.renderResponse();;

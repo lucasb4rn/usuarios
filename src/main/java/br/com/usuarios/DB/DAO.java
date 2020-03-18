@@ -51,13 +51,18 @@ public class DAO<T> {
 
     }
 
-    public void atualiza(T t) {
+    public boolean atualiza(T t) {
+        try {
+            EntityManager em = new JPAUtil().getEntityManager();
+            em.getTransaction().begin();
+            em.merge(t);
+            em.getTransaction().commit();
+            em.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
 
-        EntityManager em = new JPAUtil().getEntityManager();
-        em.getTransaction().begin();
-        em.merge(t);
-        em.getTransaction().commit();
-        em.close();
     }
 
     public List<T> listaTodos() {

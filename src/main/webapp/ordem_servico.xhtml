@@ -16,13 +16,13 @@
                     <span class="ui-separator" style="padding-right: 5px;">
                         <span class="fa fa-ellipsis-v SoftGray" />
                     </span>
-                    <p:commandButton title="Gravar" update="formCadastroUsuario" action="#{usuarioBean.save()}" icon="fa fa-save" >
+                    <p:commandButton title="Gravar" update="formCadastroUsuario" action="#{ordemServicoBean.save()}" icon="fa fa-save" >
                         <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
                     </p:commandButton>
                 </f:facet>
                 <f:facet name="right"> 
                     <p:menuButton value="Opções">
-                        <p:menuitem value="Gravar"  update="formCadastroUsuario" action="#{usuarioBean.save()}" icon="fa fa-save" >
+                        <p:menuitem value="Gravar"  update="formCadastroUsuario" action="#{ordemServicoBean.save()}" icon="fa fa-save" >
                             <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
                         </p:menuitem>
                         <p:menuitem value="Novo" title="Novo"  update="formCadastroUsuario" icon="fa fa-file" async="false" />
@@ -36,35 +36,40 @@
             <div class="ui-g">
                 <div class="ui-g-12">
                     <div class="card">
-                        <h1>Cadastro de Usuario</h1>
+                        <h1>Ordem Serviço</h1>
                         <div class="ui-g ui-fluid">
                             <div class="ui-g-12 ui-lg-6">
                                 <div class="card">
                                     <div class="ui-g-12 ui-lg-9"> 
-                                        <p:outputLabel value="Nome" />
-                                        <p:inputText maxlength="100" value="#{usuarioBean.usuario.nome}" converter="#{toUpperCase}">
+                                        <p:outputLabel value="Cliente" />
+                                        <p:inputText maxlength="100" value="#{ordemServicoBean.cliente.nome}" converter="#{toUpperCase}">
                                             <f:passThroughAttribute name="onpaste" value="return false" />
                                             <f:passThroughAttribute name="autocomplete" value="off" />
                                             <f:passThroughAttribute name="ondrop" value="return false" />
-                                            <p:ajax event="change" update="formCadastroUsuario" listener="#{fisicaBean.exists}"  />
+                                            <p:ajax event="change" update="formCadastroUsuario" listener="#{ordemServicoBean.exists}"  />
                                         </p:inputText>                                            
                                     </div>
                                     <div class="ui-g-12 ui-lg-9"> 
-                                        <p:outputLabel value="Login" />
-                                        <p:inputText maxlength="100" value="#{usuarioBean.usuario.login}" converter="#{toUpperCase}">
-                                            <f:passThroughAttribute name="onpaste" value="return false" />
-                                            <f:passThroughAttribute name="autocomplete" value="off" />
-                                            <f:passThroughAttribute name="ondrop" value="return false" />
-                                            <p:ajax event="change" update="formCadastroUsuario" listener="#{fisicaBean.exists}"  />
-                                        </p:inputText>                                            
+                                        <p:dataTable id="dataTableProdutos" var="produto" value="#{ordemServicoBean.listaProdutos}">
+                                            <p:column headerText="Nome">
+                                                <h:outputText value="#{produto.descricao}" />
+                                            </p:column>
+                                            <p:column headerText="EAN">
+                                                <h:outputText value="#{produto.EAN}" />
+                                            </p:column>
+                                            <f:facet name="footer">
+                                                <p:commandButton process="dataTableProdutos" update="formCadastroUsuario" icon="pi pi-plus" value="ADD" />
+                                            </f:facet>
+                                        </p:dataTable>                                        
                                     </div>
                                     <div class="ui-g-12 ui-lg-9"> 
-                                        <p:outputLabel value="Senha" />
-                                        <p:inputText maxlength="100" value="#{usuarioBean.usuario.senha}" converter="#{toUpperCase}">
-                                            <f:passThroughAttribute name="onpaste" value="return false" />
-                                            <f:passThroughAttribute name="autocomplete" value="off" />
-                                            <f:passThroughAttribute name="ondrop" value="return false" />
-                                            <p:ajax event="change" update="formCadastroUsuario" listener="#{fisicaBean.exists}"  />
+                                        <p:outputLabel value="Status" />
+                                        <p:inputText maxlength="100" value="#{ordemServicoBean.ordemServico.status}" converter="#{toUpperCase}">
+                                            <p:selectOneMenu>
+                                                <f:selectItem itemValue="aFazer" itemLabel="A Fazer" />
+                                                <f:selectItem itemValue="fazendo" itemLabel="Fazendo" />
+                                                <f:selectItem itemValue="feito" itemLabel="Feito" />
+                                            </p:selectOneMenu>
                                         </p:inputText>                                            
                                     </div>
                                 </div>

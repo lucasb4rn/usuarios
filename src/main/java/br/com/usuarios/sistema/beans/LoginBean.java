@@ -8,6 +8,7 @@ package br.com.usuarios.sistema.beans;
 import br.com.usuarios.sistema.Usuario;
 import br.com.usuarios.sistema.dao.UsuarioDao;
 import br.com.usuarios.utilitarios.Messages;
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -15,7 +16,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 @ManagedBean
 @ViewScoped
-public class LoginBean {
+public class LoginBean implements Serializable {
 
     private Usuario usuario;
 

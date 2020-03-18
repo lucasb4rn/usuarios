@@ -34,17 +34,16 @@
             <div class="ui-g">
                 <div class="ui-g-12">
                     <div class="card">
-                        <h1>Cadastro de Usuario</h1>
+                        <h1>Cadastro de Produto</h1>
                         <div class="ui-g ui-fluid">
                             <div class="ui-g-12 ui-lg-6">
                                 <div class="card">
-                                    <h1>Dados Gerais</h1>
                                     <div class="ui-g-12 ui-lg-6 ui-md-6 ui-sm-12">
                                         <p:outputLabel value="Descrição" />
                                         <p:inputText id="i_descricao" value="#{produtoBean.produto.descricao}"  styleClass="text-left" required="false" placeholder="Ex: Bola">
                                             <p:ajax event="change" update="i_descricao" />
                                         </p:inputText>
-                                        <p:message for="i_descricao" id="i_descricao" />
+                                        <p:message for="i_descricao" id="i_descricaoMsg" />
                                     </div>
 
                                     <div class="ui-g-12 ui-lg-6 ui-md-6 ui-sm-12">
@@ -52,23 +51,23 @@
                                         <p:inputText id="i_ean" value="#{produtoBean.produto.EAN}"  styleClass="text-left" required="false" placeholder="Ex: 1234567891231">
                                             <p:ajax event="change" update="i_ean" />
                                         </p:inputText>
-                                        <p:message for="i_ean" id="i_ean" />
+                                        <p:message for="i_ean" id="i_eanMsg" />
                                     </div>
 
                                     <div class="ui-g-12 ui-lg-6 ui-md-6 ui-sm-12">
                                         <p:outputLabel value="Preço Custo" />
-                                        <p:inputText id="i_descricao" value="#{produtoBean.produto.precoCusto}"  styleClass="text-left" required="false" placeholder="0.00">
+                                        <p:inputNumber  id="i_preco_custo" value="#{produtoBean.produto.precoCusto}"  styleClass="text-left" required="false" placeholder="0.00">
                                             <p:ajax event="change" update="i_preco_custo" />
-                                        </p:inputText>
-                                        <p:message for="i_preco_custo" id="i_preco_custo" />
+                                        </p:inputNumber >
+                                        <p:message for="i_preco_custo" id="i_preco_custoMsg" />
                                     </div>
 
                                     <div class="ui-g-12 ui-lg-6 ui-md-6 ui-sm-12">
                                         <p:outputLabel value="Preço Venda" />
-                                        <p:inputText id="i_descricao" value="#{produtoBean.produto.precoVenda}"  styleClass="text-left" required="false" placeholder="0.00">
+                                        <p:inputNumber  id="i_preco_venda" value="#{produtoBean.produto.precoVenda}"  styleClass="text-left" required="false" placeholder="0.00">
                                             <p:ajax event="change" update="i_preco_venda" />
-                                        </p:inputText>
-                                        <p:message for="i_preco_venda" id="i_preco_venda" />
+                                        </p:inputNumber >
+                                        <p:message for="i_preco_venda" id="i_preco_vendaMsg" />
                                     </div>
                                 </div>
                             </div>
@@ -76,7 +75,6 @@
                     </div>
                 </div>
             </div>
-
         </h:form>
 
         <h:form prependId="false">
