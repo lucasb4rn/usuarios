@@ -30,9 +30,16 @@ public class OrdemServicoBean implements Serializable {
         fisica = new Fisica();
         status = "aFazer";
     }
-
+    
+    
     public void save() {
     }
+    
+    public void destroy(){
+    
+    
+    }
+    
 
     public List<Produto> getListaProdutos() {
         if (Sessions.exists("produtoPesquisa")) {
