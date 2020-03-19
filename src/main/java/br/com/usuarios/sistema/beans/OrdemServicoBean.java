@@ -8,14 +8,16 @@ package br.com.usuarios.sistema.beans;
 import br.com.usuarios.sistema.Fisica;
 import br.com.usuarios.sistema.OrdemServico;
 import br.com.usuarios.sistema.Produto;
+import br.com.usuarios.utilitarios.Sessions;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 
 @ManagedBean
-@ViewScoped
-public class OrdemServicoBean {
+@SessionScoped
+public class OrdemServicoBean implements Serializable {
 
     private List<Produto> listaProdutos;
     private OrdemServico ordemServico;
@@ -33,6 +35,10 @@ public class OrdemServicoBean {
     }
 
     public List<Produto> getListaProdutos() {
+        if (Sessions.exists("produtoPesquisa")) {
+            listaProdutos.add((Produto) Sessions.getObject("produtoPesquisa", true));
+            Sessions.remove("produtoPesquisa");
+        }
         return listaProdutos;
     }
 
@@ -41,6 +47,9 @@ public class OrdemServicoBean {
     }
 
     public Fisica getFisica() {
+        if (Sessions.exists("fisicaPesquisa")) {
+            fisica = (Fisica) Sessions.getObject("fisicaPesquisa", true);
+        }
         return fisica;
     }
 

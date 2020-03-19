@@ -74,13 +74,10 @@ public class FisicaBean implements Serializable {
     }
 
     public Fisica getFisica() {
-
         if (Sessions.exists("fisicaPesquisa")) {
             fisica = (Fisica) Sessions.getObject("fisicaPesquisa", true);
         }
-
         return fisica;
-
     }
 
     public void setFisica(Fisica fisica) {

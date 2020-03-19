@@ -33,13 +33,26 @@ public class UsuarioBean implements Serializable {
     public void save() throws NoSuchAlgorithmException {
 
         DAO dao = new DAO(Usuario.class);
-        
+
         Usuario user = new Usuario(null, usuario.getNome(), usuario.getLogin(), BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt()));
-        
+
         if (!dao.save(user)) {
             Messages.error("Erro ao salvar!");
         } else {
             Messages.info("Salvo com sucesso!!");
+        }
+    }
+
+    public void editar(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public void deletar(Usuario usuario) {
+
+        if (!new DAO(Usuario.class).delete(usuario)) {
+            Messages.error("Erro ao deletar!");
+        } else {
+            Messages.info("Deletado com sucesso!");
         }
     }
 

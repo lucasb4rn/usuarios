@@ -16,5 +16,6 @@ br\com\usuarios\sistema\Fisica.class
 br\com\usuarios\utilitarios\Dates.class
 br\com\usuarios\utilitarios\Messages.class
 br\com\usuarios\sistema\beans\OrdemServicoBean.class
+br\com\usuarios\sistema\dao\ProdutoDao.class
 br\com\usuarios\DB\JPAUtil.class
 br\com\usuarios\sistema\dao\FisicaDao.class
