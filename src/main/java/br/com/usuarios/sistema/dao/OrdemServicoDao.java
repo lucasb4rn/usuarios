@@ -6,6 +6,7 @@
 package br.com.usuarios.sistema.dao;
 
 import br.com.usuarios.DB.JPAUtil;
+import br.com.usuarios.sistema.OrdemServico;
 import br.com.usuarios.sistema.Produto;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,24 +16,18 @@ import javax.persistence.Query;
  *
  * @author Lucas
  */
-public class ProdutoDao {
+public class OrdemServicoDao {
 
-    public List<Produto> pesquisaProdutoFiltro(String filter, String caixaPesquisa) {
+    public List<OrdemServico> pesquisaOrdemServicoFiltro(String statusFilter, boolean dataCheck, String data, boolean valorCheck, double valor) {
         try {
 
             List listaWhere = new ArrayList();
+            listaWhere.add("status = '" + statusFilter + "'");
 
-            String queryString = "select * from produto";
+            String queryString = "select * from sis_ordem_servico";
 
-            switch (filter) {
-
-                case "descricao":
-                    listaWhere.add("descricao like '%" + caixaPesquisa + "%'");
-                    break;
-                case "EAN":
-                    listaWhere.add("ean = '%" + caixaPesquisa + "%'");
-                    break;
-
+            if (dataCheck) {
+                listaWhere.add("dt_criacao = '" + data + "'");
             }
 
             for (int i = 0; i < listaWhere.size(); i++) {
@@ -43,7 +38,7 @@ public class ProdutoDao {
                 }
             }
 
-            Query qry = new JPAUtil().getEntityManager().createNativeQuery(queryString, Produto.class);
+            Query qry = new JPAUtil().getEntityManager().createNativeQuery(queryString, OrdemServico.class);
             return qry.getResultList();
         } catch (Exception e) {
             return new ArrayList();
@@ -54,7 +49,7 @@ public class ProdutoDao {
 
         String queryString = "select * from produto where descricao like '%" + caixaPesquisa + "%'";
         Query qry = new JPAUtil().getEntityManager().createNativeQuery(queryString, Produto.class);
-        
+
         return qry.getResultList();
     }
 

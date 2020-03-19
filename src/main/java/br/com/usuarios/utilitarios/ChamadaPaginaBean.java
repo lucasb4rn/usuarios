@@ -5,7 +5,6 @@
  */
 package br.com.usuarios.utilitarios;
 
-import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @ManagedBean
 @SessionScoped
-public class ChamadaPaginaBean implements Serializable {
+public class ChamadaPaginaBean {
 
     public synchronized static String urlRetorno() {
         if (Sessions.exists("urlRetorno")) {

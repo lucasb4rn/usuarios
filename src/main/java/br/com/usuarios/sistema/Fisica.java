@@ -5,8 +5,10 @@
  */
 package br.com.usuarios.sistema;
 
+import br.com.usuarios.utilitarios.Dates;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,8 +32,12 @@ public class Fisica implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataNascimento;
     private String documento;
+    @Column(name = "dt_cadastro")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataCadastro;
 
     public Fisica() {
+        this.dataCadastro = Dates.dataHoje();
     }
 
     public Fisica(Integer id, String nome, String telefone, String celular, String email, Date dataNascimento, String documento) {
@@ -42,6 +48,7 @@ public class Fisica implements Serializable {
         this.email = email;
         this.dataNascimento = dataNascimento;
         this.documento = documento;
+        this.dataCadastro = Dates.dataHoje();
     }
 
     public Integer getId() {
@@ -98,6 +105,14 @@ public class Fisica implements Serializable {
 
     public void setCelular(String celular) {
         this.celular = celular;
+    }
+
+    public Date getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(Date dataCadastro) {
+        this.dataCadastro = dataCadastro;
     }
 
 }

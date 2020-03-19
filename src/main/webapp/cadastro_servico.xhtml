@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="formCadastroServico">
+            <div style="margin-top: 20px"/>
+            <p:toolbar>
+                <f:facet name="left" >
+                    <p:commandButton value="Novo" title="Novo"  update="formCadastroServico" action="#{servicoBean.destroy()}" icon="fa fa-file" async="false"  />
+                    <span class="ui-separator" style="padding-right: 5px;">
+                        <span class="fa fa-ellipsis-v SoftGray" />
+                    </span>
+                    <p:commandButton title="Gravar" update="formCadastroServico" action="#{servicoBean.save()}" icon="fa fa-save" >
+                        <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                    <span class="ui-separator" style="padding-right: 5px;">
+                        <span class="fa fa-ellipsis-v SoftGray" />
+                    </span>
+                    <p:commandButton value="Pesquisar Serviço" action="#{chamadaPaginaBean.pagina('pesquisa_servico')}" icon="fa fa-search" immediate="true" async="false"/>
+                </f:facet>
+                <f:facet name="right"> 
+                    <p:menuButton value="Opções">
+                        <p:menuitem value="Gravar"  update="formCadastroServico" action="#{servicoBean.save()}" icon="fa fa-save" >
+                            <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
+                        </p:menuitem>
+                        <p:menuitem value="Novo" title="Novo"  update="formCadastroServico" icon="fa fa-file" action="#{servicoBean.destroy()}" async="false" />
+                        <p:menuitem value="Pesquisa Produto" title="Pesquisa"  update="formCadastroServico"  action="#{chamadaPaginaBean.pagina('pesquisa_servico')}" icon="fa fa-search" async="false" />
+                    </p:menuButton>
+                </f:facet>
+            </p:toolbar>  
+            <p:growl showSummary="false" showDetail="true" />
+            <p:messages showDetail="true" showSummary="false"/>
+
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card">
+                        <h1>Cadastro de Produto</h1>
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12 ui-lg-6">
+                                <div class="card">
+                                    <div class="ui-g-12 ui-lg-6 ui-md-6 ui-sm-12">
+                                        <p:outputLabel value="Descrição" />
+                                        <p:inputText id="i_descricao" value="#{servicoBean.servico.descricao}"  styleClass="text-left" required="false" placeholder="Ex: MÃO DE OBRA HORA">
+                                            <p:ajax event="change" update="i_descricao" />
+                                        </p:inputText>
+                                        <p:message for="i_descricao" id="i_descricaoMsg" />
+                                    </div>
+
+                                    <div class="ui-g-12 ui-lg-6 ui-md-6 ui-sm-12">
+                                        <p:outputLabel value="Valor" />
+                                        <p:inputNumber id="i_ean" value="#{servicoBean.servico.valor}"  styleClass="text-left" required="false" placeholder="Ex: 90,00">
+                                            <p:ajax event="change" update="i_ean" />
+                                        </p:inputNumber>
+                                        <p:message for="i_ean" id="i_eanMsg" />
+                                    </div>
+                                    <div style="margin-top: 10px" />
+                                    <div class="ui-g-12 ui-lg-3 ui-md-12 ui-sm-12">
+                                        <p:commandButton title="Gravar" value="Gravar" update="formCadastroServico" action="#{servicoBean.save()}" icon="fa fa-save" >
+                                            <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
+                                        </p:commandButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+        <h:form prependId="false">
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>                          
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

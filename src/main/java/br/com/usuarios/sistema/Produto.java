@@ -6,12 +6,16 @@
 package br.com.usuarios.sistema;
 
 // O sistema deve possuir um cadastro de produtos, com as informações Código EAN, Nome do produto, Preço de custo e Preço de venda;
-
+import br.com.usuarios.utilitarios.Dates;
 import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Produto implements Serializable {
@@ -23,8 +27,12 @@ public class Produto implements Serializable {
     private String descricao;
     private Double precoCusto;
     private Double precoVenda;
+    @Column(name = "dt_cadastro")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataCadastro;
 
     public Produto() {
+        this.dataCadastro = Dates.dataHoje();
     }
 
     public Produto(String EAN, String descricao, Double precoCusto, Double precoVenda) {
@@ -32,6 +40,7 @@ public class Produto implements Serializable {
         this.descricao = descricao;
         this.precoCusto = precoCusto;
         this.precoVenda = precoVenda;
+        this.dataCadastro = Dates.dataHoje();
     }
 
     public String getEAN() {
@@ -64,6 +73,14 @@ public class Produto implements Serializable {
 
     public void setPrecoVenda(Double precoVenda) {
         this.precoVenda = precoVenda;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 }

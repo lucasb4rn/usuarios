@@ -19,6 +19,10 @@
                     <p:commandButton title="Gravar" update="formCadastroOrdemServico" action="#{ordemServicoBean.save()}" icon="fa fa-save" >
                         <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
                     </p:commandButton>
+                    <span class="ui-separator" style="padding-right: 5px;">
+                        <span class="fa fa-ellipsis-v SoftGray" />
+                    </span>
+                    <p:commandButton value="Pesquisar Ordem Serviço" action="#{chamadaPaginaBean.pagina('pesquisa_ordem_servico')}" icon="fa fa-search" immediate="true" async="false"/>
                 </f:facet>
                 <f:facet name="right"> 
                     <p:menuButton value="Opções">
@@ -45,30 +49,71 @@
                                             <p:commandButton value="Cliente" action="#{chamadaPaginaBean.pagina('pesquisa_fisica')}"  icon="fa fa-search" immediate="true" async="false"/>
                                         </div> 
                                         <div class="ui-g-12 ui-lg-9 ui-md-12 ui-sm-12">
-                                            <p:inputText maxlength="100" value="#{ordemServicoBean.fisica.nome} #{ordemServicoBean.fisica.documento}" disabled="true" converter="#{toUpperCase}">
+                                            <p:inputText maxlength="100" value="#{ordemServicoBean.ordemServico.fisica.nome} #{ordemServicoBean.ordemServico.fisica.documento}" disabled="true" converter="#{toUpperCase}">
                                                 <p:ajax event="change" update="formCadastroOrdemServico" />
                                             </p:inputText>                                            
                                         </div>
                                     </div>
+
+
+                                    <div class="ui-g-10 ui-lg-10 ui-md-12 ui-sm-12">
+                                        <h:outputLabel value="PESQUISAR SERVIÇO" />
+                                        <p:autoComplete value="#{ordemServicoBean.servicoPesquisa}" completeMethod="#{ordemServicoBean.pesquisaServicoPorDescricao}" scrollHeight="300" 
+                                                        var="servico" itemLabel="#{servico.descricao} #{servico.valor}" itemValue="#{servico}" converter="servicoConverter" queryDelay="1000" maxlength="100" minQueryLength="1">
+                                            <p:ajax event="itemSelect" update="@this" />
+                                        </p:autoComplete>
+                                    </div>
+                                    <div class="ui-g-2 ui-lg-2 ui-md-12 ui-sm-12">
+                                        <div style="margin-top: 15px" />
+                                        <p:commandButton value="ADD" action="#{ordemServicoBean.addGridServico}"  update="formCadastroOrdemServico" icon="fa fa-plus" immediate="true" async="false"/>
+                                    </div>
+
                                     <div class="ui-g-12 ui-lg-12 ui-md-10 ui-sm-12">
-                                        <p:dataTable id="dataTableProdutos" var="produto" value="#{ordemServicoBean.listaProdutos}">
-                                            <p:column headerText="Nome">
+
+                                        <p:dataTable id="dataTableServicos" var="servico" value="#{ordemServicoBean.ordemServico.listaServicosPesquisa}">
+                                            <p:column headerText="NOME">
+                                                <h:outputText value="#{servico.descricao}" />
+                                            </p:column>
+                                            <p:column headerText="VALOR">
+                                                <h:outputText value="#{servico.valor}" />
+                                            </p:column>
+                                            <p:column style="width: 40px">
+                                                <p:commandButton action="#{ordemServicoBean.removeServico(servico)}" update="formCadastroOrdemServico" icon="fa fa-close"/>
+                                            </p:column>
+                                        </p:dataTable>                                        
+                                    </div>
+
+
+                                    <div class="ui-g-10 ui-lg-10 ui-md-12 ui-sm-12">
+                                        <h:outputLabel value="PESQUISAR PRODUTO" />
+                                        <p:autoComplete value="#{ordemServicoBean.produtoPesquisa}" completeMethod="#{ordemServicoBean.pesquisaProdutosPorDescricao}" scrollHeight="300" 
+                                                        var="produto" itemLabel="#{produto.descricao} #{produto.EAN}" itemValue="#{produto}" converter="produtoConverter" queryDelay="1000" maxlength="100" minQueryLength="1">
+                                            <p:ajax event="itemSelect" update="@this" />
+                                        </p:autoComplete>
+                                    </div>
+                                    <div class="ui-g-2 ui-lg-2 ui-md-12 ui-sm-12">
+                                        <div style="margin-top: 15px" />
+                                        <p:commandButton value="ADD" action="#{ordemServicoBean.addGrid}"  update="formCadastroOrdemServico" icon="fa fa-plus" immediate="true" async="false"/>
+                                    </div>
+
+
+                                    <div class="ui-g-12 ui-lg-12 ui-md-10 ui-sm-12">
+                                        <p:dataTable id="dataTableProdutos" var="produto" value="#{ordemServicoBean.ordemServico.listaProdutosPesquisa}">
+                                            <p:column headerText="NOME">
                                                 <h:outputText value="#{produto.descricao}" />
                                             </p:column>
-                                            <p:column headerText="EAN">
-                                                <h:outputText value="#{produto.EAN}" />
+                                            <p:column headerText="VALOR">
+                                                <h:outputText value="#{produto.precoVenda}" />
                                             </p:column>
-                                            <f:facet name="footer">
-                                                <p:commandButton update="formCadastroOrdemServico" action="#{chamadaPaginaBean.pagina('pesquisa_produto')}" icon="pi pi-plus" value="ADD" />
-                                            </f:facet>
+                                            <p:column style="width: 40px">
+                                                <p:commandButton action="#{ordemServicoBean.removeProduto(produto)}"  update="formCadastroOrdemServico" icon="fa fa-close"/>
+                                            </p:column>
                                         </p:dataTable>                                        
                                     </div>
                                     <div class="ui-g-3 ui-lg-3 ui-md-12 ui-sm-12">
-                                        <p:outputLabel value="Status" />
+                                        <p:outputLabel value="STATUS" />
                                         <p:selectOneMenu value="#{ordemServicoBean.ordemServico.status}">
-                                            <f:selectItem itemValue="aFazer" itemLabel="A Fazer" />
-                                            <f:selectItem itemValue="fazendo" itemLabel="Fazendo" />
-                                            <f:selectItem itemValue="feito" itemLabel="Feito" />
+                                            <f:selectItems value="#{ordemServicoBean.listaOrdemStatus}"  var="status" itemValue="#{status}" itemLabel="#{status}" />
                                         </p:selectOneMenu>
                                     </div>
                                 </div>

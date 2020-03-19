@@ -5,6 +5,12 @@
  */
 package br.com.usuarios.sistema;
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+// O sistema deve possuir um cadastro de produtos, com as informações Código EAN, Nome do produto, Preço de custo e Preço de venda;
 import br.com.usuarios.utilitarios.Dates;
 import java.io.Serializable;
 import java.util.Date;
@@ -19,62 +25,52 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "seg_usuario", uniqueConstraints = @UniqueConstraint(columnNames = {"login"}))
-public class Usuario implements Serializable {
+@Table(name = "sis_servico", uniqueConstraints = @UniqueConstraint(columnNames = {"ds_descricao"}))
+public class Servico implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String nome;
-    private String login;
-    private String senha;
+    private Integer id;
+    @Column(name = "ds_descricao")
+    private String descricao;
+    @Column(name = "vl_valor")
+    private Double valor;
     @Column(name = "dt_cadastro")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataCadastro;
 
-    public Usuario() {
+    public Servico() {
         this.dataCadastro = Dates.dataHoje();
     }
 
-    public Usuario(Long id, String nome, String login, String senha) {
-        this.id = id;
-        this.nome = nome;
-        this.login = login;
-        this.senha = senha;
+    public Servico(String descricao, Double valor) {
+        this.descricao = descricao;
+        this.valor = valor;
         this.dataCadastro = Dates.dataHoje();
     }
 
-    public Long getId() {
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public Double getValor() {
+        return valor;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setValor(Double valor) {
+        this.valor = valor;
     }
 
     public Date getDataCadastro() {
@@ -84,5 +80,7 @@ public class Usuario implements Serializable {
     public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
+    
+    
 
 }
