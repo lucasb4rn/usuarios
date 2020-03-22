@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="formPesquisaOrdemServico">
+            <div style="margin-top: 20px"/>
+            <p:growl showSummary="false" showDetail="true" />
+            <p:messages showDetail="true" showSummary="false"/>
+
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-lg-8">
+                        <h:panelGroup styleClass="card" layout="block">
+                            <h1>Pesquisa Ordem Serviço</h1>
+                            <div class="ui-g">
+                                <p:tab title="Filtros">
+                                    <h:panelGroup layout="span" id="i_filtros">
+                                        <div class="ui-g-12 ui-lg-2 ui-md-6 ui-sm-6">
+                                            <label>Filtro</label>
+                                            <h:panelGroup layout="span">
+                                                <p:selectOneMenu value="#{cadastroOrdemServicoBean.filtroOrdemServico.statusOrdem}" autoWidth="true">
+                                                    <p:ajax event="change" listener="#{consultaSuperiorBean.loadListaOrdemServicoPesquisa()}" />
+                                                    <f:selectItem itemValue="AFazer"      itemLabel="A Fazer" />
+                                                    <f:selectItem itemValue="Fazendo"    itemLabel="Fazendo" />
+                                                    <f:selectItem itemValue="Feito"   itemLabel="Feito" />
+                                                </p:selectOneMenu>
+                                            </h:panelGroup>
+                                        </div>
+                                        <div class="ui-g-6 ui-lg-6 ui-md-6 ui-sm-6">
+                                            <p:selectBooleanCheckbox value="#{cadastroOrdemServicoBean.filtroOrdemServico.clienteCheck}" itemLabel="Cliente" >
+                                                <p:ajax event="change" update="formPesquisaOrdemServico:i_filtros"/>
+                                            </p:selectBooleanCheckbox>
+                                            <p:inputText disabled="#{cadastroOrdemServicoBean.filtroOrdemServico.clienteCheck eq false}" value="#{cadastroOrdemServicoBean.filtroOrdemServico.clienteNome}" maxlength="6" />        
+                                        </div>
+                                        <div class="ui-g-2 ui-lg-2 ui-md-6 ui-sm-6">
+                                            <p:selectBooleanCheckbox value="#{cadastroOrdemServicoBean.filtroOrdemServico.dataCheck}" itemLabel="Dt Criação">
+                                                <p:ajax event="change" update="formPesquisaOrdemServico:i_filtros"/>
+                                            </p:selectBooleanCheckbox>
+                                            <p:inputMask disabled="#{cadastroOrdemServicoBean.filtroOrdemServico.dataCheck eq false}" onfocus="this.select()" mask="99/99/9999" value="#{cadastroOrdemServicoBean.filtroOrdemServico.dataCriacao}">
+                                                <p:ajax event="change" update="@this" />
+                                            </p:inputMask>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-lg-1 ui-md-6 ui-sm-6">
+                                            <br />
+                                            <p:commandButton id="btn_pesquisar" icon="fa fa-filter" update="formPesquisaOrdemServico" style="width: 100px" value="Filtrar" action="#{cadastroOrdemServicoBean.loadListaOrdemServicoPesquisa()}" />
+                                        </div>
+                                    </h:panelGroup>
+                                </p:tab>
+
+
+                                <div class="ui-g ui-fluid">
+                                    <div class="ui-g-12 ui-md-12 ui-lg-12">
+                                        <p:dataTable value="#{cadastroOrdemServicoBean.listaOrdemServicoPesquisa}" reflow="true" paginatorPosition="bottom" var="servicoX" id="tbl" emptyMessage="Nenhum registro encontrado" paginator="true" >
+                                            <f:facet name="header">
+                                                Lista de Ordem Serviço
+                                            </f:facet>
+                                            <p:column headerText="Cliente">
+                                                <p:commandLink action="#{cadastroOrdemServicoBean.redireciona(servicoX)}" styleClass="bold uppercase" value="#{servicoX.fisica.nome}"/>
+                                            </p:column>
+                                            <p:column headerText="Status" width="80">
+                                                <p:commandLink action="#{cadastroOrdemServicoBean.redireciona(servicoX)}" styleClass="text-center bold" value="#{servicoX.status}"/>
+                                            </p:column>
+                                            <p:column headerText="Data Criação" width="150"  styleClass="text-center bold">
+                                                <p:commandLink action="#{cadastroOrdemServicoBean.redireciona(servicoX)}" value="#{servicoX.dataCadastroString}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </div> 
+                                </div> 
+                            </div>
+                        </h:panelGroup>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+        <h:form prependId="false">
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>                          
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

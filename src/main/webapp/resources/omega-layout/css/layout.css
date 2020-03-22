@@ -2151,6 +2151,12 @@ h2 {
   background-color: #ffffff;
   padding: 1em;
   margin-top: 16px; }
+
+.card-red {
+  background-color: #e82424;
+  padding: 1em;
+  margin-top: 16px; }
+
   .card h1 {
     margin: 0 0 .5em 0;
     border-bottom: 1px solid #d5d5d5;

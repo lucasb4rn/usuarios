@@ -6,7 +6,6 @@
 package br.com.usuarios.sistema.dao;
 
 import br.com.usuarios.DB.JPAUtil;
-import br.com.usuarios.sistema.Produto;
 import br.com.usuarios.sistema.Servico;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +52,10 @@ public class ServicoDao {
 
     public List<Servico> pesquisaServicoDescricao(String caixaPesquisa) {
 
-        String queryString = "select * from sis_servico where descricao like '%" + caixaPesquisa + "%'";
-        Query qry = new JPAUtil().getEntityManager().createNativeQuery(queryString, Servico.class);
+        String queryString = "select * from sis_servico \n "
+                + " where ds_descricao like '%" + caixaPesquisa + "%'";
         
+        Query qry = new JPAUtil().getEntityManager().createNativeQuery(queryString, Servico.class);
         return qry.getResultList();
     }
 

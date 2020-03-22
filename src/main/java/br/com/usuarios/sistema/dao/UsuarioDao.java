@@ -22,14 +22,15 @@ public class UsuarioDao {
         }
     }
 
-    public Usuario buscaPorUsuario(String login) {
+    public Usuario buscaPorUsuarioLogin(String login) {
         try {
-            String queryString = "select * from seg_usuario where login = '" + login +"'";
+            String queryString = "select * from seg_usuario where ds_login = '" + login +"'";
             Query qry = new JPAUtil().getEntityManager().createNativeQuery(queryString, Usuario.class);
             return (Usuario) qry.getSingleResult();
         } catch (Exception e) {
             return null;
         }
     }
-
+    
+    
 }

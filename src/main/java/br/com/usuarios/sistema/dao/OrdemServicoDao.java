@@ -5,9 +5,12 @@
  */
 package br.com.usuarios.sistema.dao;
 
+import br.com.usuario.filtros.FiltroOrdemServico;
 import br.com.usuarios.DB.JPAUtil;
 import br.com.usuarios.sistema.OrdemServico;
-import br.com.usuarios.sistema.Produto;
+import br.com.usuarios.sistema.OrdemStatus;
+import br.com.usuarios.utilitarios.Dates;
+import static br.com.usuarios.utilitarios.Dates.data;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Query;
@@ -18,16 +21,21 @@ import javax.persistence.Query;
  */
 public class OrdemServicoDao {
 
-    public List<OrdemServico> pesquisaOrdemServicoFiltro(String statusFilter, boolean dataCheck, String data, boolean valorCheck, double valor) {
+    public List<OrdemServico> pesquisaOrdemServicoFiltro(FiltroOrdemServico filtroOrdemServico) {
         try {
 
             List listaWhere = new ArrayList();
-            listaWhere.add("status = '" + statusFilter + "'");
 
-            String queryString = "select * from sis_ordem_servico";
+            String queryString = "select * from sis_ordem_servico s join pes_fisica p on p.id = s.id_fisica";
 
-            if (dataCheck) {
-                listaWhere.add("dt_criacao = '" + data + "'");
+            listaWhere.add(" s.status = '" + filtroOrdemServico.getStatusOrdem() + "'");
+            
+            if (filtroOrdemServico.isClienteCheck() && filtroOrdemServico.getClienteNome().length() > 0) {
+                listaWhere.add(" p.ds_nome like '%" + filtroOrdemServico.getClienteNome() + "%'");
+            }
+
+            if (filtroOrdemServico.isDataCheck() && filtroOrdemServico.getDataCriacao().length() > 0) {
+                listaWhere.add(" s.dt_cadastro = '" + Dates.converteStringToSqlDate(filtroOrdemServico.getDataCriacao()) + "'");
             }
 
             for (int i = 0; i < listaWhere.size(); i++) {
@@ -38,19 +46,27 @@ public class OrdemServicoDao {
                 }
             }
 
-            Query qry = new JPAUtil().getEntityManager().createNativeQuery(queryString, OrdemServico.class);
+            String orderBy = "order by p.ds_nome, s.dt_cadastro";
+            
+            Query qry = new JPAUtil().getEntityManager().createNativeQuery(queryString + orderBy, OrdemServico.class);
             return qry.getResultList();
         } catch (Exception e) {
             return new ArrayList();
         }
     }
 
-    public List<Produto> pesquisaProdutoDescricao(String caixaPesquisa) {
+    public List<OrdemServico> retornaOrdemServicoPorStatus(OrdemStatus ordemStatus) {
 
-        String queryString = "select * from produto where descricao like '%" + caixaPesquisa + "%'";
-        Query qry = new JPAUtil().getEntityManager().createNativeQuery(queryString, Produto.class);
+        String queryString = "select * from sis_ordem_servico where status = '" + ordemStatus + "'";
 
-        return qry.getResultList();
+        try {
+            Query qry = new JPAUtil().getEntityManager().createNativeQuery(queryString, OrdemServico.class);
+            return qry.getResultList();
+
+        } catch (Exception e) {
+            return new ArrayList();
+        }
+
     }
 
 }

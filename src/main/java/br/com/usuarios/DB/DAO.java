@@ -20,15 +20,13 @@ public class DAO<T> {
     }
 
     public boolean save(T t) {
-
-        EntityManager em = new JPAUtil().getEntityManager();
         try {
+            EntityManager em = new JPAUtil().getEntityManager();
             em.getTransaction().begin();
             em.persist(t);
             em.getTransaction().commit();
             em.close();
             return true;
-
         } catch (Exception e) {
             return false;
         }

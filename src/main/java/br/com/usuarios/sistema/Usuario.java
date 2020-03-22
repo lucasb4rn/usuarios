@@ -19,15 +19,17 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "seg_usuario", uniqueConstraints = @UniqueConstraint(columnNames = {"login"}))
+@Table(name = "seg_usuario", uniqueConstraints = @UniqueConstraint(columnNames = {"ds_login"}))
 public class Usuario implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name = "ds_nome")
     private String nome;
+    @Column(name = "ds_login", nullable = false)
     private String login;
+    @Column(name = "ds_senha", nullable = false)
     private String senha;
     @Column(name = "dt_cadastro")
     @Temporal(TemporalType.TIMESTAMP)

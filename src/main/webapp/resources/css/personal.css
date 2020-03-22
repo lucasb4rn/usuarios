@@ -10,6 +10,9 @@ and open the template in the editor.
 
 .bold {font-weight: bold !important;}
 .text-center {text-align: center !important;}
+.text-left {text-align: left !important;}
+.text-right {text-align: left !important;}
+.uppercase {text-transform: uppercase !important;}
 
 .margin-top-aux {margin-top: 8px !important;}
 .margin-top-min {margin-top: 5px !important;}

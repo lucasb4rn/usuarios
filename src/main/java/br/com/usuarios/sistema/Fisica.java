@@ -19,18 +19,22 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "pes_fisica", uniqueConstraints = @UniqueConstraint(columnNames = {"documento"}))
+@Table(name = "pes_fisica", uniqueConstraints = @UniqueConstraint(columnNames = {"ds_documento"}))
 public class Fisica implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    @Column(name = "ds_nome", length = 100)
     private String nome;
     private String telefone;
     private String celular;
     private String email;
+    @Column(name = "dt_nascimento")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataNascimento;
+    @Column(name = "ds_documento", nullable = false)
     private String documento;
     @Column(name = "dt_cadastro")
     @Temporal(TemporalType.TIMESTAMP)
@@ -85,6 +89,14 @@ public class Fisica implements Serializable {
 
     public Date getDataNascimento() {
         return dataNascimento;
+    }
+
+    public String getDataNascimentoString() {
+        return Dates.converteData(dataNascimento);
+    }
+    
+       public void setDataNascimentoString(String dataNascimento) {
+        this.dataNascimento = Dates.converte(dataNascimento);
     }
 
     public void setDataNascimento(Date dataNascimento) {

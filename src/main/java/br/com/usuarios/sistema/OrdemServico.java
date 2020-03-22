@@ -11,10 +11,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,6 +26,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "sis_ordem_servico")
@@ -33,38 +37,38 @@ public class OrdemServico implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @OneToOne
-    @JoinColumn(name = "id_fisica")
+    @JoinColumn(name = "id_fisica", nullable = false)
     private Fisica fisica;
-    @OneToMany
-    @JoinColumn(name = "id_produto")
-    private List<Produto> listaProdutos;
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @Fetch(FetchMode.SUBSELECT)
+    @JoinColumn(name = "id_servico_fatura_item")
+    private List<ServicoFaturaItem> listaServicoFaturaItem;
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "id_produto_fatura_item")
+    private List<ProdutoFaturaItem> listaProdutoFaturaItem;
     @Enumerated(EnumType.STRING)
     private OrdemStatus status;
-
     @Column(name = "dt_cadastro")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataCadastro;
-
-    @OneToMany
-    @JoinColumn(name = "id_servico")
-    private List<Servico> listaServicos;
 
     public OrdemServico() {
         this.id = null;
         this.fisica = new Fisica();
         this.status = OrdemStatus.AFazer;
-        this.listaProdutos = new ArrayList();
+        this.listaServicoFaturaItem = new ArrayList();
+        this.listaProdutoFaturaItem = new ArrayList();
         this.dataCadastro = Dates.dataHoje();
-        this.listaServicos = new ArrayList();
     }
 
-    public OrdemServico(Integer id, Fisica fisica, List<Produto> listaProdutos, OrdemStatus status, List<Servico> listaServico) {
+    public OrdemServico(Integer id, Fisica fisica, List<ProdutoFaturaItem> listaProdutoFaturaItem, OrdemStatus status, List<ServicoFaturaItem> listaServicoFaturaItem) {
         this.id = id;
         this.fisica = fisica;
-        this.listaProdutos = listaProdutos;
+        this.listaProdutoFaturaItem = listaProdutoFaturaItem;
         this.status = status;
         this.dataCadastro = Dates.dataHoje();
-        this.listaServicos = listaServico;
+        this.listaServicoFaturaItem = listaServicoFaturaItem;
     }
 
     public Integer getId() {
@@ -83,14 +87,6 @@ public class OrdemServico implements Serializable {
         this.fisica = fisica;
     }
 
-    public List<Produto> getListaProdutos() {
-        return listaProdutos;
-    }
-
-    public void setListaProdutos(List<Produto> listaProdutos) {
-        this.listaProdutos = listaProdutos;
-    }
-
     public Date getDataCadastro() {
         return dataCadastro;
     }
@@ -103,11 +99,17 @@ public class OrdemServico implements Serializable {
         this.dataCadastro = dataCadastro;
     }
 
-    public List<Produto> getListaProdutosPesquisa() {
+    public List<ProdutoFaturaItem> getListaProdutosPesquisa() {
+
         if (Sessions.exists("produtoPesquisa")) {
-            this.listaProdutos.add((Produto) Sessions.getObject("produtoPesquisa", true));
+            Produto produto = new Produto();
+            produto = (Produto) Sessions.getObject("produtoPesquisa", true);
+            ProdutoFaturaItem produtoFaturaItem = new ProdutoFaturaItem();
+            produtoFaturaItem.setProduto(produto);
+            listaProdutoFaturaItem.add(produtoFaturaItem);
+
         }
-        return listaProdutos;
+        return listaProdutoFaturaItem;
     }
 
     public OrdemStatus getStatus() {
@@ -118,19 +120,31 @@ public class OrdemServico implements Serializable {
         this.status = status;
     }
 
-    public List<Servico> getListaServicosPesquisa() {
+    public List<ServicoFaturaItem> getListaServicosPesquisa() {
         if (Sessions.exists("servicoPesquisa")) {
-            this.listaServicos.add((Servico) Sessions.getObject("servicoPesquisa", true));
+            Servico servico = new Servico();
+            servico = (Servico) Sessions.getObject("servicoPesquisa", true);
+            ServicoFaturaItem servicoFaturaItem = new ServicoFaturaItem();
+            servicoFaturaItem.setServico(servico);
+            listaServicoFaturaItem.add(servicoFaturaItem);
         }
-        return listaServicos;
+        return listaServicoFaturaItem;
     }
 
-    public void setListaServicos(List<Servico> listaServicos) {
-        this.listaServicos = listaServicos;
+    public List<ServicoFaturaItem> getListaServicoFaturaItem() {
+        return listaServicoFaturaItem;
     }
 
-    public List<Servico> getListaServicos() {
-        return listaServicos;
+    public void setListaServicoFaturaItem(List<ServicoFaturaItem> listaServicoFaturaItem) {
+        this.listaServicoFaturaItem = listaServicoFaturaItem;
+    }
+
+    public List<ProdutoFaturaItem> getListaProdutoFaturaItem() {
+        return listaProdutoFaturaItem;
+    }
+
+    public void setListaProdutoFaturaItem(List<ProdutoFaturaItem> listaProdutoFaturaItem) {
+        this.listaProdutoFaturaItem = listaProdutoFaturaItem;
     }
 
 }

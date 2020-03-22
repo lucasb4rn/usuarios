@@ -31,22 +31,36 @@ public class Servico implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "ds_descricao")
+    @Column(name = "ds_descricao", length = 100)
     private String descricao;
-    @Column(name = "vl_valor")
+    @Column(name = "vl_valor", precision = 10, scale = 2)
     private Double valor;
+    @Column(name = "qt_quantidade")
+    private int quantidade;
     @Column(name = "dt_cadastro")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataCadastro;
 
     public Servico() {
+        this.descricao = "";
+        this.valor = new Double(0);
+        this.dataCadastro = Dates.dataHoje();
+        this.quantidade = 1;
+    }
+
+    public Servico(String descricao, Double valor, int quantidade) {
+        this.descricao = descricao;
+        this.valor = valor;
+        this.quantidade = quantidade;
         this.dataCadastro = Dates.dataHoje();
     }
 
-    public Servico(String descricao, Double valor) {
-        this.descricao = descricao;
-        this.valor = valor;
-        this.dataCadastro = Dates.dataHoje();
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 
     public String getDescricao() {
@@ -80,7 +94,5 @@ public class Servico implements Serializable {
     public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
-    
-    
 
 }

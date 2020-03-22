@@ -1,0 +1,255 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="formCadastroOrdemServico">
+
+            <div style="margin-top: 20px"/>
+            <p:toolbar>
+                <f:facet name="left" >
+                    <p:commandButton value="Novo" title="Novo"  update="formCadastroOrdemServico"  action="#{cadastroOrdemServicoBean.destroy()}" icon="fa fa-file" async="false"  />
+                    <span class="ui-separator" style="padding-right: 5px;">
+                        <span class="fa fa-ellipsis-v SoftGray" />
+                    </span>
+                    <p:commandButton title="Gravar" update="formCadastroOrdemServico" action="#{cadastroOrdemServicoBean.save()}" icon="fa fa-save" >
+                        <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                    <span class="ui-separator" style="padding-right: 5px;">
+                        <span class="fa fa-ellipsis-v SoftGray" />
+                    </span>
+                    <p:commandButton value="Ordem Serviço" action="#{chamadaPaginaBean.pagina('pesquisaOrdemServico')}" icon="fa fa-search" immediate="true" async="false"/>
+                </f:facet>
+                <f:facet name="right"> 
+                    <p:menuButton value="Opções" rendered="#{userAgentHelper.mobile eq false}">
+                        <p:menuitem value="Gravar"  update="formCadastroOrdemServico" action="#{cadastroOrdemServicoBean.save()}" icon="fa fa-save" >
+                            <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
+                        </p:menuitem>
+                        <p:menuitem value="Novo" title="Novo"  update="formCadastroOrdemServico" action="#{cadastroOrdemServicoBean.destroy()}" icon="fa fa-file" async="false" />
+                    </p:menuButton>
+                </f:facet>
+            </p:toolbar>  
+
+            <p:growl showSummary="false" showDetail="true" />
+            <p:messages showDetail="true" showSummary="false"/>
+
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-lg-8">
+                        <h:panelGroup styleClass="card" layout="block">
+                            <h1>Ordem de Serviço</h1>
+                            <div class="ui-g">
+                                <div class="ui-g-3 ui-lg-3 ui-md-12 ui-sm-12">
+                                    <p:commandButton value="Cliente" action="#{chamadaPaginaBean.pagina('pesquisaFisica')}"  icon="fa fa-search" immediate="true" async="false"/>
+                                </div> 
+                                <div class="ui-g-9 ui-lg-9 ui-md-12 ui-sm-12">
+                                    <p:inputText maxlength="100" value="#{cadastroOrdemServicoBean.ordemServico.fisica.nome}    #{cadastroOrdemServicoBean.ordemServico.fisica.documento}" disabled="true" style="text-transform:  uppercase;" converter="#{toUpperCase}">
+                                        <p:ajax event="change" update="formCadastroOrdemServico" />
+                                    </p:inputText>                                            
+                                </div>
+                                <div class="ui-g-10 ui-lg-10 ui-md-12 ui-sm-12">
+                                    <p:outputLabel value="Pesquisar Serviço"/>
+                                    <p:separator />
+                                    <div style="margin-top: 10px"/>
+                                    <p:autoComplete value="#{cadastroOrdemServicoBean.servicoPesquisa}" completeMethod="#{cadastroOrdemServicoBean.pesquisaServicoPorDescricao}" scrollHeight="300" 
+                                                    var="servico" itemLabel="#{servico.descricao} #{servico.valor eq 0 ? '' : servico.valor}" itemValue="#{servico}" converter="servicoConverter" queryDelay="1000" maxlength="100" minQueryLength="1">
+                                        <p:ajax event="itemSelect" update="@this" />
+                                    </p:autoComplete>
+                                </div>
+                                <div class="ui-g-2 ui-lg-2 ui-md-12 ui-sm-12">
+                                    <div style="margin-top: 30px" />
+                                    <p:commandButton value="ADD" action="#{cadastroOrdemServicoBean.addGridServico}"  oncomplete="#{cadastroOrdemServicoBean.calculaTotalServico()}" update="formCadastroOrdemServico" icon="fa fa-plus" immediate="true" async="false" />
+                                </div>
+
+                                <div class="ui-g-12 ui-lg-12 ui-md-10 ui-sm-12">
+                                    <p:dataTable id="dataTableServicos" sortBy="#{1}"   reflow="true"  var="servico" rows="4" paginator="#{cadastroUsuarioBean.listaUsuarios.size() > 10 ? 'true' : 'false'}" paginatorPosition="bottom" emptyMessage="Nenenhum Serviço Adicionado."  value="#{cadastroOrdemServicoBean.ordemServico.listaServicosPesquisa}">
+                                        <p:column style="#{userAgentHelper.mobile eq true ? '' : 'width: 40px'}" >
+                                            <p:commandButton oncomplete="PF('dlg_alteracao_servico').show()"  update=":formDialogServico" icon="fa fa-pencil"  >
+                                                <f:setPropertyActionListener target="#{cadastroOrdemServicoBean.servicoFaturaItemEditar}" value="#{servico}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                        <p:column headerText="Nome" styleClass="text-center">
+                                            <h:outputText value="#{servico.servico.descricao}" />
+                                        </p:column>
+                                        <p:column headerText="Qtd" styleClass="text-center" style="#{userAgentHelper.mobile eq true ? '' : 'width: 40px '}">
+                                            <h:outputText value="#{servico.quantidade}" />
+                                        </p:column>
+                                        <p:column headerText="Valor Un." styleClass="text-center" >
+                                            <h:outputText value="#{servico.valor}" >
+                                                <f:convertNumber pattern="#0.00" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Valor Liquido" styleClass="text-center">
+                                            <h:outputText value="#{servico.valor}" >
+                                                <f:convertNumber pattern="#0.00" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <f:facet name="footer">
+                                            <div>
+                                                <h:outputText  style="#{userAgentHelper.mobile eq true ? 'display:none;' : 'visibility: hidden'}" value="." />
+                                                <div  style="#{userAgentHelper.mobile eq true ? '' : 'float: right'}">
+                                                    <h:outputText  value="Total Serviços: " />
+                                                    <h:outputText value="#{cadastroOrdemServicoBean.totalServico}">
+                                                        <f:convertNumber type="currency" currencySymbol="$" />
+                                                    </h:outputText>
+                                                </div>
+                                            </div>
+                                        </f:facet>
+                                        <p:column style="#{userAgentHelper.mobile eq true ? '' : 'width: 40px'}">
+                                            <p:commandButton action="#{cadastroOrdemServicoBean.removeServico(servico)}" oncomplete="#{cadastroOrdemServicoBean.calculaTotalServico()}" update="formCadastroOrdemServico" icon="fa fa-close" />
+                                        </p:column>
+                                    </p:dataTable>                                        
+                                </div>
+                                <div style="margin-top: 50px"/>
+                                <div class="ui-g-10 ui-lg-10 ui-md-12 ui-sm-12">
+                                    <h:outputLabel value="Pesquisar Produto" />
+                                    <p:separator />
+                                    <p:autoComplete value="#{cadastroOrdemServicoBean.produtoPesquisa}"  forceSelection="true" completeMethod="#{cadastroOrdemServicoBean.pesquisaProdutosPorDescricao}" scrollHeight="300" 
+                                                    var="produtoPesquisa" itemLabel="#{produtoPesquisa.descricao} #{produtoPesquisa.EAN}" itemValue="#{produtoPesquisa}" converter="produtoConverter" queryDelay="1000" maxlength="100" minQueryLength="1">
+                                        <p:ajax event="itemSelect" update="formCadastroOrdemServico" />
+                                        <p:ajax  event="itemSelect" oncomplete="#{cadastroOrdemServicoBean.clear(produtoPesquisa)}" />
+                                        <p:ajax process="@this"/>
+                                    </p:autoComplete>
+                                </div>
+                                <div class="ui-g-2 ui-lg-2 ui-md-12 ui-sm-12">
+                                    <div style="margin-top: 30px" />
+                                    <p:commandButton value="ADD" action="#{cadastroOrdemServicoBean.addGrid}"  oncomplete="#{cadastroOrdemServicoBean.calculaTotalProduto()}" update="formCadastroOrdemServico" icon="fa fa-plus" immediate="true" async="false"/>
+                                </div>
+
+                                <div class="ui-g-12 ui-lg-12 ui-md-10 ui-sm-12">
+                                    <p:dataTable id="dataTableProdutos" var="produto" rows="4" paginator="#{cadastroUsuarioBean.listaUsuarios.size() > 4 ? 'true' : 'false'}" paginatorPosition="bottom" emptyMessage="Nenenhum Produto Adicionado." reflow="true"  value="#{cadastroOrdemServicoBean.ordemServico.listaProdutosPesquisa}">
+                                        <p:column style="width: 40px">
+                                            <p:commandButton oncomplete="PF('dlg_alteracao_produto').show()"  update=":formDialogProduto" icon="fa fa-pencil"  >
+                                                <f:setPropertyActionListener target="#{cadastroOrdemServicoBean.produtoFaturaItemEditar}" value="#{produto}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                        <p:column headerText="Nome">
+                                            <h:outputText value="#{produto.produto.descricao}" />
+                                        </p:column>
+                                        <p:column headerText="Qtd" styleClass="text-center" style="#{userAgentHelper.mobile eq true ? '' : 'width: 40px'}">
+                                            <h:outputText value="#{produto.quantidade}" />
+                                        </p:column>
+                                        <p:column headerText="Valor Un." styleClass="text-center">
+                                            <h:outputText value="#{produto.valor}" >
+                                                <f:convertNumber pattern="#0.00" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Valor Liquido" styleClass="text-center">
+                                            <h:outputText value="#{produto.valor}" >
+                                                <f:convertNumber pattern="#0.00" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column style="#{userAgentHelper.mobile eq true ? '' : 'width: 40px'}">
+                                            <p:commandButton action="#{cadastroOrdemServicoBean.removeProduto(produto)}" oncomplete="#{cadastroOrdemServicoBean.calculaTotalProduto()}"  update="formCadastroOrdemServico" icon="fa fa-close"  />
+                                        </p:column>
+                                        <f:facet name="footer">
+                                            <div>
+                                                <h:outputText  style="#{userAgentHelper.mobile eq true ? 'display:none;' : 'visibility: hidden'}" value="." />
+                                                <div  style="#{userAgentHelper.mobile eq true ? '' : 'float: right'}">
+                                                    <h:outputText  value="Total Produtos: " />
+                                                    <h:outputText value="#{cadastroOrdemServicoBean.totalProduto}">
+                                                        <f:convertNumber type="currency" currencySymbol="$" />
+                                                    </h:outputText>
+                                                </div>
+                                            </div>
+                                        </f:facet>
+                                    </p:dataTable>                                        
+                                </div>
+                                <div class="ui-g-4 ui-lg-4 ui-md-12 ui-sm-12">
+                                    <div>
+                                        <p:outputLabel value="Status Serviço" />
+                                        <p:selectOneMenu value="#{cadastroOrdemServicoBean.ordemServico.status}">
+                                            <f:selectItems value="#{cadastroOrdemServicoBean.listaOrdemStatus}"  var="status" itemValue="#{status}" itemLabel="#{status}" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="ui-g-8 ui-lg-8 ui-md-12 ui-sm-12" style="text-align: right">
+                                    <div >
+                                        <div style="margin-top: 20px"/>
+                                        <p:outputLabel value="Total Geral: " />
+                                        <h:outputFormat value="#{cadastroOrdemServicoBean.totalGeral}" styleClass="bold" >
+                                            <f:convertNumber type="currency" currencySymbol="$" />
+                                        </h:outputFormat>
+                                    </div>
+                                </div>
+                            </div>   
+                            <div style="margin-top: 15px" />
+                            <div class="ui-g-10 ui-lg-10 ui-md-12 ui-sm-12">
+                                <p:commandButton title="Gravar" value="#{cadastroOrdemServicoBean.ordemServico.id eq null ? 'Gravar' : 'Alterar'}"  style="#{cadastroOrdemServicoBean.ordemServico.id eq null ? '' : 'background-color:green;'}" update="formCadastroOrdemServico" action="#{cadastroOrdemServicoBean.save()}" icon="fa fa-save" >
+                                    <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </div>
+                            <div class="ui-g-2 ui-lg-2 ui-md-12 ui-sm-12">
+                                <p:commandButton title="Excluir" value="Excluir" style="background-color: red;" disabled="${cadastroOrdemServicoBean.ordemServico.id eq null}" update="formCadastroOrdemServico" action="#{cadastroOrdemServicoBean.deletar()}" icon="fa fa-save" >
+                                    <p:confirm header="Exclusão de Registro" message="Deseja realmente Excluir esse registro?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </div>
+                            <div style="margin-top: 60px" />
+                        </h:panelGroup>        
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+
+        <h:form id="formDialogProduto">
+            <p:dialog width="300" widgetVar="dlg_alteracao_produto"  responsive="true"  modal="true" position="center" closable="true" header="Dados do Produto" >
+                <p:messages closable="true" showDetail="true" id="i_panel_email_test"  showSummary="true"><p:autoUpdate /></p:messages>
+                <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12">
+                    <h:outputText value="#{cadastroOrdemServicoBean.produtoFaturaItemEditar.produto.descricao}" />
+                </div>
+                <div>
+                    <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12">
+                        <h:outputText value="Quantidade" />
+                        <p:inputText value="#{cadastroOrdemServicoBean.produtoFaturaItemEditar.quantidade}" />
+                    </div>
+                    <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12">
+
+                        <h:outputText value="Valor" />
+                        <p:inputText value="#{cadastroOrdemServicoBean.produtoFaturaItemEditar.valor}" >
+                            <f:convertNumber pattern="#0.00" />
+                        </p:inputText>
+                    </div>
+                    <p:commandButton value="Alterar" action="#{cadastroOrdemServicoBean.editarProduto(cadastroOrdemServicoBean.produtoFaturaItemEditar)}" oncomplete="#{cadastroOrdemServicoBean.calculaTotalProduto()}"  update="formCadastroOrdemServico formDialogProduto" icon="fa fa-close"  />
+                </div>
+            </p:dialog>
+        </h:form>
+
+
+        <h:form id="formDialogServico">
+            <p:dialog width="300" widgetVar="dlg_alteracao_servico"   responsive="true"  modal="true" position="center" closable="true" header="Dados do Serviços">
+                <p:messages closable="true" showDetail="true" id="i_panel_email_test"  showSummary="true"><p:autoUpdate /></p:messages>
+                <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12">
+                    <h:outputText value="#{cadastroOrdemServicoBean.servicoFaturaItemEditar.servico.descricao}" />
+                </div>
+                <div>
+                    <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12">
+                        <h:outputText value="Quantidade" />
+                        <p:inputText value="#{cadastroOrdemServicoBean.servicoFaturaItemEditar.quantidade}" />
+                    </div>
+                    <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12">
+
+                        <h:outputText value="Valor" />
+                        <p:inputText value="#{cadastroOrdemServicoBean.servicoFaturaItemEditar.valor}" >
+                            <f:convertNumber pattern="#0.00" />
+                        </p:inputText>
+                    </div>
+                    <p:commandButton value="Alterar" action="#{cadastroOrdemServicoBean.editarServico(cadastroOrdemServicoBean.servicoFaturaItemEditar)}" oncomplete="#{cadastroOrdemServicoBean.calculaTotalServico()}"  update="formCadastroOrdemServico formDialogServico" icon="fa fa-close"  />
+                </div>
+            </p:dialog>
+        </h:form>
+
+        <h:form prependId="false">
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>                          
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

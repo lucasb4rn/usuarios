@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="formCadastroCliente">
+            <div style="margin-top: 20px"/>
+            <p:growl showSummary="false" showDetail="true" />
+            <p:messages showDetail="true" showSummary="false"/>
+
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-lg-8">
+                        <h:panelGroup styleClass="card" layout="block">
+                            <h1>Pesquisa de Produto</h1>
+                            <div class="ui-g">
+                                <div class="ui-g">
+                                    <div class="ui-lg-3 ui-g-12 ui-md-12">
+                                        <label>Filtro</label>
+                                        <h:panelGroup layout="span">
+                                            <p:selectOneMenu value="#{cadastroProdutoBean.filter}">
+                                                <p:ajax event="change" update="@this id_find_term" global="false"/>
+                                                <f:selectItem itemValue="descricao"       itemLabel="Descrição"/>
+                                                <f:selectItem itemValue="EAN"        itemLabel="EAN"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGroup>
+                                    </div>
+                                    <div class="ui-lg-6 ui-g-12 ui-md-12">
+                                        <label>Descrição da Pesquisa</label>
+                                        <h:panelGroup  id="id_find_term">
+                                            <p:inputMask value="#{cadastroProdutoBean.caixaPesquisa}"  mask="#{mask.getModelo(cadastroFisicaBean.filter)}">
+                                                <p:ajax event="change" update="@this" global="false" />
+                                            </p:inputMask>
+                                        </h:panelGroup>
+                                    </div>
+                                    <div class="ui-lg-3 ui-g-12 ui-md-12">
+                                        <div style="margin-top: 15px"></div>
+                                        <p:commandButton value="Pesquisar" action="#{cadastroProdutoBean.findProdutoFiltro}" update="formCadastroCliente"/>
+                                    </div>
+
+                                    <div class="ui-g ui-fluid">
+                                        <div class="ui-g-12 ui-md-12 ui-lg-12">
+                                            <p:dataTable value="#{cadastroProdutoBean.listaProdutoPesquisa}" paginatorPosition="bottom" var="produtoX" id="tbl" emptyMessage="Nenhum registro encontrado" paginator="#{cadastroUsuarioBean.listaUsuarios.size() > 10 ? 'true' : 'false'}" >
+                                                <f:facet name="header">
+                                                    <h:outputText  style="#{userAgentHelper.mobile eq true ? 'display:none;' : 'visibility: hidden'}" value="." />
+                                                    <div  style="#{userAgentHelper.mobile eq true ? '' : 'float: left'}">
+                                                        <h:outputText value="Lista de Produtos"  />
+                                                    </div>
+                                                </f:facet>
+                                                <p:column headerText="Descrição" >
+                                                    <p:commandLink styleClass="bold uppercase" action="#{cadastroProdutoBean.redireciona(produtoX)}" value="#{produtoX.descricao}"/>
+                                                </p:column>
+                                                <p:column headerText="Preço Venda" style="#{userAgentHelper.mobile eq true ? '' : 'width: 130px'}"  styleClass="text-center" >
+                                                    <p:commandLink action="#{cadastroProdutoBean.redireciona(produtoX)}" value="#{produtoX.precoVendaString}"/>
+                                                </p:column>
+                                                <p:column headerText="EAN" style="#{userAgentHelper.mobile eq true ? '' : 'width: 130px'}"  styleClass="text-center" >
+                                                    <p:commandLink action="#{cadastroProdutoBean.redireciona(produtoX)}" value="#{produtoX.EAN}"/>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div> 
+                                    </div> 
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+        <h:form prependId="false">
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>                          
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

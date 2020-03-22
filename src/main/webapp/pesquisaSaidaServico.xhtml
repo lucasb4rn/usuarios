@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="formPesquisaSaidaServico">
+            <div style="margin-top: 20px"/>
+            <p:growl showSummary="false" showDetail="true" />
+            <p:messages showDetail="true" showSummary="false"/>
+
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-lg-8">
+                        <h:panelGroup styleClass="card" layout="block">
+                            <h1>Pesquisa Saída Serviço</h1>
+                            <div class="ui-g">
+                                <p:tab title="Filtros">
+                                    <h:panelGroup layout="span" id="i_filtros">
+                                        <div class="ui-g-6 ui-lg-6 ui-md-6 ui-sm-6">
+                                            <p:selectBooleanCheckbox value="#{saidaServicoBean.filtroSaidaServico.checkCliente}" itemLabel="Cliente" >
+                                                <p:ajax event="change" update="formPesquisaSaidaServico:i_filtros"/>
+                                            </p:selectBooleanCheckbox>
+                                            <p:inputText disabled="#{saidaServicoBean.filtroSaidaServico.checkCliente eq false}" value="#{saidaServicoBean.filtroSaidaServico.clienteNome}" maxlength="6" />        
+                                        </div>
+                                        <div class="ui-g-3 ui-lg-3 ui-md-6 ui-sm-6">
+                                            <p:selectBooleanCheckbox value="#{saidaServicoBean.filtroSaidaServico.checkDataCriacao}" itemLabel="Data Criação">
+                                                <p:ajax event="change" update="formPesquisaSaidaServico:i_filtros"/>
+                                            </p:selectBooleanCheckbox>
+                                            <p:inputMask disabled="#{saidaServicoBean.filtroSaidaServico.checkDataCriacao eq false}" onfocus="this.select()" mask="99/99/9999" value="#{saidaServicoBean.filtroSaidaServico.dataCadastro}">
+                                                <p:ajax event="change" update="@this" />
+                                            </p:inputMask>
+                                        </div>
+                                        <div class="ui-g-12 ui-lg-1 ui-md-6 ui-sm-6">
+                                            <br />
+                                            <p:commandButton id="btn_pesquisar" icon="fa fa-filter" update="formPesquisaSaidaServico" style="width: 100px" value="Filtrar" action="#{saidaServicoBean.loadListaSaidaServicoPesquisa()}" />
+                                        </div>
+                                    </h:panelGroup>
+                                </p:tab>
+                                <div class="ui-g ui-fluid">
+                                    <div class="ui-g-12 ui-md-12 ui-lg-12">
+                                        <p:dataTable value="#{saidaServicoBean.listaSaidaServicoPesquisa}" rows="10" paginatorPosition="bottom" var="saidaServicoX" id="tbl" emptyMessage="Nenhum registro encontrado" paginator="#{cadastroUsuarioBean.listaUsuarios.size() > 10 ? 'true' : 'false'}" >
+                                            <f:facet name="header">
+                                                <h:outputText  style="#{userAgentHelper.mobile eq true ? 'display:none;' : 'visibility: hidden'}" value="." />
+                                                <div  style="#{userAgentHelper.mobile eq true ? '' : 'float: left'}">
+                                                    <h:outputText value="Lista de Saida Serviço"  />
+                                                </div>
+                                            </f:facet>
+                                            <p:column headerText="Cliente">
+                                                <p:commandLink styleClass="uppercase" action="#{saidaServicoBean.redireciona(saidaServicoX)}" value="#{saidaServicoX.fisica.nome}"/>
+                                            </p:column>
+                                            <p:column headerText="Qtd Total" styleClass="text-center" style="#{userAgentHelper.mobile eq true ? '' : 'width: 100px'}" >
+                                                <p:commandLink action="#{cadastroServicoBean.redireciona(saidaServicoX)}" value="#{saidaServicoX.quantidadeTotal}"/>
+                                            </p:column>
+                                            <p:column headerText="Valor Total" styleClass="text-center" style="#{userAgentHelper.mobile eq true ? '' : 'width: 100px'}">
+                                                <p:commandLink action="#{cadastroServicoBean.redireciona(saidaServicoX)}">
+                                                    <h:outputText value="#{saidaServicoX.quantidadeTotal}">
+                                                        <f:convertNumber type="currency" currencySymbol="$" />
+                                                    </h:outputText>
+                                                </p:commandLink>
+                                            </p:column>
+                                            <p:column headerText="Data Cadastro" styleClass="text-center" style="#{userAgentHelper.mobile eq true ? '' : 'width: 100px'}">
+                                                <p:commandLink action="#{cadastroServicoBean.redireciona(saidaServicoX)}" value="#{saidaServicoX.dataCriacaoString}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </div> 
+                                </div> 
+                            </div>
+                        </h:panelGroup>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+        <h:form prependId="false">
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>                          
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

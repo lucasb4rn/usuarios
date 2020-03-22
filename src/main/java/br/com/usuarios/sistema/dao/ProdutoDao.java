@@ -11,10 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Query;
 
-/**
- *
- * @author Lucas
- */
 public class ProdutoDao {
 
     public List<Produto> pesquisaProdutoFiltro(String filter, String caixaPesquisa) {
@@ -22,17 +18,15 @@ public class ProdutoDao {
 
             List listaWhere = new ArrayList();
 
-            String queryString = "select * from produto";
+            String queryString = "select * from prod_produto";
 
             switch (filter) {
-
                 case "descricao":
-                    listaWhere.add("descricao like '%" + caixaPesquisa + "%'");
+                    listaWhere.add("ds_descricao like '%" + caixaPesquisa + "%'");
                     break;
                 case "EAN":
-                    listaWhere.add("ean = '%" + caixaPesquisa + "%'");
+                    listaWhere.add("ean like '%" + caixaPesquisa + "%'");
                     break;
-
             }
 
             for (int i = 0; i < listaWhere.size(); i++) {
@@ -52,7 +46,7 @@ public class ProdutoDao {
 
     public List<Produto> pesquisaProdutoDescricao(String caixaPesquisa) {
 
-        String queryString = "select * from produto where descricao like '%" + caixaPesquisa + "%'";
+        String queryString = "select * from prod_produto where ds_descricao like '%" + caixaPesquisa + "%'";
         Query qry = new JPAUtil().getEntityManager().createNativeQuery(queryString, Produto.class);
         
         return qry.getResultList();

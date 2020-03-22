@@ -27,10 +27,10 @@ public class FisicaDao {
             switch (filter) {
 
                 case "cpf":
-                    listaWhere.add("documento = '" + term + "'");
+                    listaWhere.add("ds_documento = '" + term + "'");
                     break;
                 case "nome":
-                    listaWhere.add("nome like '%" + term + "%'");
+                    listaWhere.add("ds_nome like '%" + term + "%'");
                     break;
                 case "email":
                     listaWhere.add("email like '%" + term + "%'");
@@ -50,6 +50,18 @@ public class FisicaDao {
             return qry.getResultList();
         } catch (Exception e) {
             return new ArrayList();
+        }
+    }
+
+    public Fisica pesquisaPessoaPorCPF(String documento) {
+        
+        try {
+            String queryString = "select * from pes_fisica where ds_documento = '" + documento + "'";
+            Query qry = new JPAUtil().getEntityManager().createNativeQuery(queryString, Fisica.class);
+            return (Fisica) qry.getSingleResult();
+
+        } catch (Exception e) {
+            return null;
         }
     }
 

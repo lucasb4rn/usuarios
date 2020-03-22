@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 @SessionScoped
 public class ChamadaPaginaBean {
 
+    private HttpServletRequest paginaRequerida = null;
+    private String urlAtual = "";
+
     public synchronized static String urlRetorno() {
         if (Sessions.exists("urlRetorno")) {
             String urlRetorno = Sessions.getString("urlRetorno");
@@ -23,6 +26,13 @@ public class ChamadaPaginaBean {
     }
 
     public synchronized static String pagina(String pagina) {
+        Sessions.remove(pagina + "Bean");
+        HttpServletRequest paginaRequerida = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        Sessions.put("urlRetorno", converteURL(paginaRequerida.getRequestURI()));
+        return pagina + "?faces-redirect=true";
+    }
+
+    public synchronized static String pesquisa(String pagina) {
         HttpServletRequest paginaRequerida = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         Sessions.put("urlRetorno", converteURL(paginaRequerida.getRequestURI()));
         return pagina + "?faces-redirect=true";

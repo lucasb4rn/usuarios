@@ -1,0 +1,169 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="formSaidaProduto">
+
+            <div style="margin-top: 20px"/>
+            <p:toolbar>
+                <f:facet name="left" >
+                    <p:commandButton value="Novo" title="Novo"  update="formSaidaProduto" icon="fa fa-file" async="false"  />
+                    <span class="ui-separator" style="padding-right: 5px;">
+                        <span class="fa fa-ellipsis-v SoftGray" />
+                    </span>
+                    <p:commandButton title="Gravar" update="formSaidaProduto" action="#{saidaProdutoBean.save()}" icon="fa fa-save" >
+                        <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                    <span class="ui-separator" style="padding-right: 5px;">
+                        <span class="fa fa-ellipsis-v SoftGray" />
+                    </span>
+                    <p:commandButton value="Saida Produto" action="#{chamadaPaginaBean.pesquisa('pesquisaSaidaProduto')}" icon="fa fa-search" immediate="true" async="false"/>
+                </f:facet>
+                <f:facet name="right"> 
+                    <p:menuButton value="Opções" rendered="#{userAgentHelper.mobile eq false}">
+                        <p:menuitem value="Gravar"  update="formSaidaProduto" action="#{saidaProdutoBean.save()}" icon="fa fa-save" >
+                            <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
+                        </p:menuitem>
+                        <p:menuitem value="Novo" title="Novo"  update="formSaidaProduto" icon="fa fa-file" async="false" />
+                    </p:menuButton>
+                </f:facet>
+            </p:toolbar>  
+
+            <p:growl showSummary="false" showDetail="true" />
+            <p:messages showDetail="true" showSummary="false"/>
+
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-8 ui-lg-8 ui-md-12 ui-sm-12">
+                        <h:panelGroup styleClass="card" layout="block">
+                            <h1>Saída de Produtos</h1>
+                            <div class="ui-g">
+                                <div class="ui-g-3 ui-lg-3 ui-md-6 ui-sm-12">
+                                    <p:commandButton value="Cliente"  action="#{chamadaPaginaBean.pesquisa('pesquisaFisica')}"  icon="fa fa-search" immediate="true" async="false"/>
+                                </div> 
+                                <div class="ui-g-12 ui-lg-9 ui-md-12 ui-sm-12">
+                                    <p:inputText maxlength="100" style="font-weight: bold; text-transform: uppercase;" value="#{saidaProdutoBean.saidaProduto.fisica.nome}      #{saidaProdutoBean.saidaProduto.fisica.documento}" disabled="true" converter="#{toUpperCase}">
+                                        <p:ajax event="change" update="formSaidaProduto" />
+                                    </p:inputText>                                            
+                                </div>
+
+                                <div class="ui-g-10 ui-lg-10 ui-md-12 ui-sm-12">
+                                    <h:outputLabel value="Pesquisar Produto" />
+                                    <p:autoComplete value="#{saidaProdutoBean.produtoPesquisa}" completeMethod="#{saidaProdutoBean.pesquisaProdutosPorDescricao}" scrollHeight="300" 
+                                                    var="produto" itemLabel="#{produto.descricao} #{produto.EAN}" itemValue="#{produto}" converter="produtoConverter" queryDelay="1000" maxlength="100" minQueryLength="1">
+                                        <p:ajax event="itemSelect" update="@this" />
+                                    </p:autoComplete>
+                                </div>
+                                <div class="ui-g-2 ui-lg-2 ui-md-12 ui-sm-12">
+                                    <div style="margin-top: 15px" />
+                                    <p:commandButton value="ADD" action="#{saidaProdutoBean.addGrid}" oncomplete="#{saidaProdutoBean.calculaTotalProduto()}" update="formSaidaProduto" icon="fa fa-plus" immediate="true" async="false"/>
+                                </div>
+
+
+                                <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12">
+                                    <p:dataTable id="dataTableProdutos" var="produtoFaturaItem"  rows="4" reflow="true" paginator="#{saidaProdutoBean.saidaProduto.listaProdutosPesquisa.size() > 4 ? 'true' : 'false'}" paginatorPosition="bottom" value="#{saidaProdutoBean.saidaProduto.listaProdutosPesquisa}">
+                                        <p:column style="#{userAgentHelper.mobile eq true ? '' : 'width: 40px'}">
+                                            <p:commandButton oncomplete="PF('dlg_alteracao_produto').show()"  update="formDialogProduto" icon="fa fa-pencil"  >
+                                                <f:setPropertyActionListener target="#{saidaProdutoBean.produtoFaturaItemEditar}" value="#{produtoFaturaItem}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                        <p:column headerText="Nome">
+                                            <h:outputText value="#{produtoFaturaItem.produto.descricao}" />
+                                        </p:column>
+                                        <p:column headerText="Qtd" styleClass="text-center" style="#{userAgentHelper.mobile eq true ? '' : 'width: 50px'}">
+                                            <h:outputText value="#{produtoFaturaItem.quantidade}" />
+                                        </p:column>
+                                        <p:column headerText="Valor Un." styleClass="text-center" style="#{userAgentHelper.mobile eq true ? '' : 'width: 100px'}">
+                                            <h:outputText value="#{produtoFaturaItem.valor}" >
+                                                <f:convertNumber type="currency" currencySymbol="$" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Valor Liq." styleClass="text-center" style="#{userAgentHelper.mobile eq true ? '' : 'width: 100px'}">
+                                            <h:outputText value="#{produtoFaturaItem.valor}" >
+                                                <f:convertNumber type="currency" currencySymbol="$" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <f:facet name="footer">
+                                            <div>
+                                                <h:outputText  style="#{userAgentHelper.mobile eq true ? 'display:none;' : 'visibility: hidden'}" value="." />
+                                                <div  style="#{userAgentHelper.mobile eq true ? '' : 'float: right'}">
+                                                    <h:outputText  value="Total Produtos: " />
+                                                    <h:outputText value="#{saidaProdutoBean.totalProduto}">
+                                                        <f:convertNumber type="currency" currencySymbol="$" />
+                                                    </h:outputText>
+                                                </div>
+                                            </div>
+                                        </f:facet>
+                                        <p:column style="#{userAgentHelper.mobile eq true ? '' : 'width: 40px'}">
+                                            <p:commandButton action="#{saidaProdutoBean.removeProduto(produtoFaturaItem)}" oncomplete="#{saidaProdutoBean.calculaTotalProduto()}" update="formSaidaProduto" icon="fa fa-close" />
+                                        </p:column>
+                                    </p:dataTable>                                        
+                                </div>
+
+                                <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12" style="text-align: right">
+                                    <div >
+                                        <div style="margin-top: 20px"/>
+                                        <p:outputLabel value="Total Geral: " />
+                                        <h:outputFormat value="#{saidaProdutoBean.totalGeral}" >
+                                            <f:convertNumber type="currency" currencySymbol="$" />
+                                        </h:outputFormat>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 15px" />
+                                <div class="ui-g-10 ui-lg-10 ui-md-6 ui-sm-12">
+                                    <p:commandButton title="Gravar" value="Gravar" update="formSaidaProduto" action="#{saidaProdutoBean.save()}" icon="fa fa-save" >
+                                        <p:confirm header="Salvar Cadastro" message="Deseja gravar esse registro?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </div>
+                                <div class="ui-g-2 ui-lg-2 ui-md-12 ui-sm-12">
+                                    <p:commandButton title="Excluir" value="Excluir" style="background-color: red;" disabled="${saidaProdutoBean.saidaProduto.id eq null}" update="formSaidaProduto" action="#{saidaProdutoBean.deletar()}" icon="fa fa-save" >
+                                        <p:confirm header="Exclusão de Registro" message="Deseja Excluir esse registro?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </div>
+
+                </div>
+            </div>
+        </h:form>
+
+        <h:form id="formDialogProduto">
+            <p:dialog width="300px" widgetVar="dlg_alteracao_produto"   responsive="true"  modal="true" position="center" closable="true" header="Dados do Produto" >
+                <p:messages closable="true" showDetail="true"  showSummary="true"><p:autoUpdate /></p:messages>
+                <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12">
+                    <h:outputText value="Descrição: " />
+                    <h:outputText value="#{saidaProdutoBean.produtoFaturaItemEditar.produto.descricao}" />
+                </div>
+                <div>
+                    <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12">
+                        <h:outputText value="Quantidade: " />
+                        <p:inputText value="#{saidaProdutoBean.produtoFaturaItemEditar.quantidade}" />
+                    </div>
+                    <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12">
+                        <h:outputText value="Valor: " />
+                        <p:inputText value="#{saidaProdutoBean.produtoFaturaItemEditar.valor}" >
+                            <f:convertNumber pattern="#0.00" />
+                        </p:inputText>
+                    </div>
+                    <p:commandButton value="Alterar" action="#{saidaProdutoBean.editarProduto(saidaProdutoBean.produtoFaturaItemEditar)}" oncomplete="#{saidaProdutoBean.calculaTotalProduto()}"  update="formSaidaProduto formDialogProduto" icon="fa fa-close"  />
+                </div>
+            </p:dialog>
+        </h:form>
+
+
+        <h:form prependId="false">
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>                          
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

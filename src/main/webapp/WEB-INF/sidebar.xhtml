@@ -9,34 +9,61 @@
         <div class="sidebar">
             <div class="nano">
                 <div class="nano-content sidebar-scroll-content">
+                    <div style="margin-top: 20px  " />
                     <div class="logo">
-                        <p:graphicImage name="images/logo.png" library="omega-layout" width="113"/>
+                        <p:commandLink action="#{chamadaPaginaBean.pagina('home')}">
+                            <h1 style="color: white;">Elétrica Manoel</h1>
+                        </p:commandLink>
                     </div>
+                    <div style="margin-top: 10px  " />
 
                     <div class="profile">
                         <p:graphicImage name="images/profile.png" library="omega-layout" />
                         <a id="profile-button" href="#">
-                            <span class="username">XPTO Sistemas</span>
+                            <div style="margin-top: 10px  " />
+                            <span class="username">Sistema</span>
                             <i class="fa fa-fw fa-cog"></i>
                         </a>
                         <ul>
-                            <li><a href="#"><i class="fa fa-fw fa-sliders"></i><span>Account</span></a></li>
-                            <li><a href="#"><i class="fa fa-fw fa-bell"></i><span>Notifications</span><span class="menu-badge">2</span></a></li>
-                            <li><a href="#"><i class="fa fa-fw fa-sign-out"></i><span>Logout</span></a></li>
+                            <li>
+                                <h:commandLink immediate="true">
+                                    <i class="fa fa-fw fa-sliders"></i><span>Account</span>
+                                </h:commandLink>
+                            </li>
+                            <li>
+                                <h:commandLink immediate="true">
+                                    <i class="fa fa-fw fa-bell"></i><span>Notifications</span><span class="menu-badge">2</span>
+                                </h:commandLink>
+                            </li>
+                            <li>
+                                <h:commandLink action="#{loginBean.logout()}" immediate="true">
+                                    <i class="fa fa-fw fa-sign-out"></i><span>Logout</span>
+                                </h:commandLink>
+                            </li>
                         </ul>
                     </div>
+                    <div style="margin-top: 10px  " />
 
                     <div class="menu">
                         <po:menu>
+
+                            <p:menuitem id="home" value="Inicio" icon="fa fa-sign-in fa-fw" action="#{chamadaPaginaBean.pagina('home')}" />
                             <p:submenu label="Cadastros" icon="fa fa-plus">
-                                <p:menuitem id="usuario" value="Usuario" icon="fa fa-home" outcome="cadastro_usuario"/>
-                                <p:menuitem id="cliente" value="Cliente" icon="fa fa-home" outcome="cadastro_fisica"/>
-                                <p:menuitem id="produto" value="Produto" icon="fa fa-home" outcome="cadastro_produto"/>
-                                <p:menuitem id="servico" value="Servico" icon="fa fa-home" outcome="cadastro_servico"/>
-                                <p:menuitem id="ordem_servico" value="Ordem Serviço" icon="fa fa-home" outcome="ordem_servico"/>
+                                <p:menuitem id="cliente" value="Cliente" icon="fa fa-users fa-fw" action="#{chamadaPaginaBean.pagina('cadastroFisica')}" />
+                                <p:menuitem id="produto" value="Produto" icon="fa fa-cube" action="#{chamadaPaginaBean.pagina('cadastroProduto')}" />
+                                <p:menuitem id="servico" value="Servico" icon="fa fa-home" action="#{chamadaPaginaBean.pagina('cadastroServico')}" />
+                                <p:menuitem id="ordemServico" value="Ordem Serviço" icon="fa fa-fw fa-adjust fa-fw" action="#{chamadaPaginaBean.pagina('cadastroOrdemServico')}"/>
                             </p:submenu>
-                            <p:submenu label="Movimentos" icon="fa fa-plus">
+                            <p:submenu label="Movimentos" icon="fa fa-exchange">
+                                <p:menuitem id="saidaProduto" value="Saída Produto" icon="fa fa-dropbox "  action="#{chamadaPaginaBean.pagina('saidaProduto')}" />
+                                <p:menuitem id="saidaServico" value="Saída Servico" icon="fa fa-gavel" action="#{chamadaPaginaBean.pagina('saidaServico')}" />
                             </p:submenu>
+
+                            <p:submenu label="Gerais" icon="fa fa-gear fa-fw">
+                                <p:menuitem id="usuario" value="Usuario" icon="fa fa-user-plus" action="#{chamadaPaginaBean.pagina('cadastroUsuario')}"/>
+                            </p:submenu>
+
+
                         </po:menu>
                     </div>
                 </div>

@@ -6,16 +6,70 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
-        <div class="ui-g">
-            <div class="ui-g-12">
-                <div class="card">
-                    <h1>Empty Page</h1>
-                    <p>Use this page to start from scratch and place your custom content.</p>
-                    <p:button outcome="home" value="Home" style="display:inline-block;margin-top:5px"/>
+        <div class="ui-fluid dashboard">
+            <div class="ui-g">
+                <div class="ui-g-12 ui-lg-12">
+                    <div class="card">
+                        <h1>Cadastro Rápido</h1>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-lg-1 ui-md-3 ui-sm-6">
+                                <p:commandLink action="#{chamadaPaginaBean.pagina('cadastroFisica')}" immediate="true" style="color: blue">
+                                    <label>Clientes</label><br /><br />
+                                    <i class="fa fa-4x fa-users fa-border"></i>
+                                </p:commandLink>
+                            </div>
+                            <div class="ui-g-12 ui-lg-1 ui-md-3 ui-sm-6">
+                                <p:commandLink action="#{chamadaPaginaBean.pagina('cadastroProduto')}" immediate="true" style="color: green">
+                                    <label>Produtos</label><br /><br />
+                                    <i class="fa fa-4x fa-cube fa-border"></i>
+                                </p:commandLink>                
+                            </div>                    
+                            <div class="ui-g-12 ui-lg-1 ui-md-3 ui-sm-6">
+                                <p:commandLink action="#{chamadaPaginaBean.pagina('cadastroServico')}" immediate="true" style="color: gray">
+                                    <label>Serviços</label><br /><br />
+                                    <i class="fa fa-4x fa-map fa-border"></i>
+                                </p:commandLink>                
+                            </div>                    
+                            <div class="ui-g-12 ui-lg-1 ui-md-3 ui-sm-6">
+                                <p:commandLink action="#{chamadaPaginaBean.pagina('cadastroOrdemServico')}" immediate="true" style="color: red">
+                                    <label>Ordem Serviço</label><br /><br />
+                                    <i class="fa fa-4x fa-adjust fa-border"></i>
+                                </p:commandLink>                        
+                            </div>
+                            <div class="ui-g-12 ui-lg-1 ui-md-3 ui-sm-6">
+                                <p:commandLink action="#{chamadaPaginaBean.pagina('cadastroUsuario')}" immediate="true" style="color: #409cdc">
+                                    <label style="margin-left: 20px">Usuário</label><br /><br />
+                                    <i class="fa fa-4x fa-user-plus fa-border"></i>
+                                </p:commandLink>                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-12 ui-lg-12">
+                    <div class="card">
+                        <h1>Movimentos</h1>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-lg-1 ui-md-3 ui-sm-6">
+                                <p:commandLink action="#{chamadaPaginaBean.pagina('saidaProduto')}" immediate="true"  style="color: #000000">
+                                    <label>Saída Produto</label><br /><br />
+                                    <i class="fa fa-4x  fa fa-dropbox fa-border"></i>
+                                </p:commandLink>
+                            </div>
+                            <div class="ui-g-12 ui-lg-1 ui-md-3 ui-sm-6">
+                                <p:commandLink  action="#{chamadaPaginaBean.pagina('saidaServico')}" immediate="true"  style="color: #000000">
+                                    <label>Saída Serviço</label><br /><br />
+                                    <i class="fa fa-4x fa fa fa-gavel fa-border"></i>
+                                </p:commandLink>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        
+
+
     </ui:define>
 
 </ui:composition>
